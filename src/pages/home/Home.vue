@@ -32,7 +32,7 @@ export default {
                 { img:require('../../assets/img/Shop_reservation.png'), url:'/Reservation'},
                 { img:require('../../assets/img/Shop_signing.png'), url:'/Signing'},
                 { img:require('../../assets/img/bind_shops.png'), url:'/BindShops'},
-                { img:require('../../assets/img/Rent_extraction.png'), url:'/'},
+                { img:require('../../assets/img/Rent_extraction.png'), url:'/RentExtraction'},
             ],
             percent: 0, count: 1000.86,
         }
@@ -41,9 +41,7 @@ export default {
         XCircle,Countup
     },
     computed: {
-        text() {
-        return this.currentRate.toFixed(0) + '%'
-        }
+        
     },
     created(){
         document.title = '扑满'
@@ -53,6 +51,7 @@ export default {
                 this.percent == 75 ? clearInterval(a) : ''
             }
         },100)
+        this.$store.commit('ACTIVE',0)
     },
     methods: {
         name() {
@@ -84,7 +83,7 @@ export default {
         width: 100%; display: flex; position: absolute; bottom: 0.36rem; left: 0; 
         div{ 
             width: 2.1rem; height: 1rem; margin-left: 0.3rem; text-align: center; color: rgba(255,255,255,1); font-size: 0.36rem; line-height: 0.7rem;
-            .font1; text-shadow: 0.018rem 0.01rem 0.01rem black;
+            .font1; text-shadow: 1.8px 1px 1px black;
         }
         .Already_presented{
             background: url('../../assets/img/Already_presented.png') no-repeat; background-size: 100% 100%;

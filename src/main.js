@@ -3,7 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import fonstSize from './fonstSize'
+import fonstSize from './store/fonstSize'
+
+import store from './store/store'
+Vue.prototype.$store = store
+import axios from './store/api'
+Vue.prototype.$axios = axios
 
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';

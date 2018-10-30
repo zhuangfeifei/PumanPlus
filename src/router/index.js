@@ -11,17 +11,28 @@ const Signing = resolve => require(['@/pages/home/Signing'], resolve)
 const BindShops = resolve => require(['@/pages/home/BindShops'], resolve)
 const BindShop = resolve => require(['@/pages/home/BindShop'], resolve)
 const BindShopItem = resolve => require(['@/pages/home/BindShopItem'], resolve)
+const RentExtraction = resolve => require(['@/pages/home/RentExtraction'], resolve)
+const PutResult = resolve => require(['@/pages/home/PutResult'], resolve)
+const Contract = resolve => require(['@/pages/home/Contract'], resolve)
 
 const Shop = resolve => require(['@/pages/shop/Shop'], resolve)
+const ShopDetails = resolve => require(['@/pages/shop/ShopDetails'], resolve)
 
 const Discount = resolve => require(['@/pages/discount/Discount'], resolve)
+const SecondKill = resolve => require(['@/pages/discount/SecondKill'], resolve)
 
 const Profit = resolve => require(['@/pages/profit/Profit'], resolve)
+const ProfitDetails = resolve => require(['@/pages/profit/ProfitDetails'], resolve)
 
 const My = resolve => require(['@/pages/my/My'], resolve)
 const Authentication = resolve => require(['@/pages/my/Authentication'], resolve)
 const BindPhone = resolve => require(['@/pages/my/BindPhone'], resolve)
 const BindCertificates = resolve => require(['@/pages/my/BindCertificates'], resolve)
+const BindResult = resolve => require(['@/pages/my/BindResult'], resolve)
+const Information = resolve => require(['@/pages/my/Information'], resolve)
+const BindCard = resolve => require(['@/pages/my/BindCard'], resolve)
+const Supplement = resolve => require(['@/pages/my/Supplement'], resolve)
+const Help = resolve => require(['@/pages/my/Help'], resolve)
 
 
 Vue.use(Router)
@@ -44,6 +55,23 @@ export default new Router({
     { path:'/Result', component: Result },
     { path:'/Signing', component: Signing },
     { path:'/BindShops', component: BindShops, children:[{ path:'/', component: BindShop },{ path:'/BindShops/BindShopItem', component: BindShopItem }] },
-    { path:'/Authentication', component: Authentication, children:[{ path:'/', component: BindPhone },{ path:'/Authentication/BindCertificates', component: BindCertificates }] },
+    { path:'/RentExtraction', component: RentExtraction },
+    { path:'/PutResult', component: PutResult },
+    { path:'/Contract', component: Contract },
+
+    { path:'/ShopDetails', component: ShopDetails },
+
+    { path:'/SecondKill', component: SecondKill },
+
+    { path:'/ProfitDetails', component: ProfitDetails },
+
+    { path:'/Authentication', component: Authentication, children:[
+        { path:'/', component: BindPhone },{ path:'/Authentication/BindCertificates', component: BindCertificates },
+        { path:'/Authentication/Information', component: Information },{ path:'/Authentication/Supplement', component: Supplement },
+      ] 
+    },
+    { path:'/BindResult', component: BindResult },
+    { path:'/BindCard', component: BindCard },
+    { path:'/Help', component: Help },
   ]
 })

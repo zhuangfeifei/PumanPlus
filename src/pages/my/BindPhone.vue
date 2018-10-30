@@ -42,7 +42,7 @@ export default {
             }, 1000)
         },
         next(){
-            this.phone.length == 11 && this.code.length == 6 ? this.$router.push({path:'/Authentication/BindCertificates'}) : ''
+            this.phone.length == 11 && this.code.length == 6 ? this.$router.push({path:'/Authentication/BindCertificates', query:{phone:this.phone}}) : ''
         }
     },
 }
@@ -86,7 +86,7 @@ export default {
 }
 
 .BindPhone_btn{
-    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 0.01rem 0px rgba(0,0,0,0.3);
+    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
     font-size: 0.36rem; .font1; margin: 0.3rem auto;
     background:rgba(206,206,206,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(0,0,0,0.16);
 }

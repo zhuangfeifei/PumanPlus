@@ -87,7 +87,7 @@ export default {
 }
 
 .Reservation_btn{
-    width: 6.7rem; height: 0.96rem; color: white; font-size: 0.36rem; text-align: center; line-height: 0.96rem; margin: 0.3rem auto; text-shadow: 0.018rem 0.01rem 0.01rem black;
+    width: 6.7rem; height: 0.96rem; color: white; font-size: 0.36rem; text-align: center; line-height: 0.96rem; margin: 0.3rem auto; text-shadow: 1.8px 1px 1px black;
     background:linear-gradient(90deg,rgba(231,71,68,1),rgba(248,142,146,1)); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(178,19,16,0.16); .font1; margin-top: 2rem;
 }
 

@@ -57,12 +57,12 @@ export default {
 
 
 .result_btns{
-    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; font-size: 0.36rem; color:rgba(255,255,255,1);
+    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; font-size: 0.36rem; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
     margin: 0 auto; .font1; background:linear-gradient(90deg,rgba(231,71,68,1),rgba(248,142,146,1)); border: 0.01rem solid rgba(231,71,68,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(178,19,16,0.16);
 }
 .result_btn{
     width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; font-size: 0.36rem; color: rgba(231,71,68,1);
-    margin: 0.48rem auto; .font1; background:rgba(255,255,255,0.2); border: 0.01rem solid rgba(231,71,68,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(178,19,16,0.16);
+    margin: 0.48rem auto; .font1; background:rgba(255,255,255,0.2); border: 0.02rem solid rgba(231,71,68,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(178,19,16,0.16);
 }
 
 </style>

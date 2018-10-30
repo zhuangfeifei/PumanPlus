@@ -14,11 +14,13 @@
 
         <div class="my_list">
             <div class="my_list_" v-for="(item, index) in myList" :key="index">
-                <van-row>
-                    <van-col span="4" class="my_list_logo"><img :src="item.img" alt=""></van-col>
-                    <van-col span="18"><span>{{item.name}}</span></van-col>
-                    <van-col span="2" class="my_list_link"><img src="../../assets/img/link.png" alt=""></van-col>
-                </van-row>
+                <router-link :to="item.url">
+                    <van-row>
+                        <van-col span="4" class="my_list_logo"><img :src="item.img" alt=""></van-col>
+                        <van-col span="18"><span>{{item.name}}</span></van-col>
+                        <van-col span="2" class="my_list_link"><img src="../../assets/img/link.png" alt=""></van-col>
+                    </van-row>
+                </router-link>
             </div>
         </div>
 
@@ -30,16 +32,17 @@ export default {
     data() {
         return {
             myList:[
-                {name:'个人信息', img:require('../../assets/img/Personal.png'), url:'/'},
-                {name:'信息补充', img:require('../../assets/img/information.png'), url:'/'},
-                {name:'已绑商铺', img:require('../../assets/img/TiedShops.png'), url:'/'},
+                {name:'个人信息', img:require('../../assets/img/Personal.png'), url:'/Authentication/Information'},
+                {name:'信息补充', img:require('../../assets/img/information.png'), url:'/Authentication/Supplement'},
+                {name:'已绑商铺', img:require('../../assets/img/TiedShops.png'), url:'/BindShops'},
                 {name:'我的预约', img:require('../../assets/img/MyReservation.png'), url:'/'},
-                {name:'关于帮助', img:require('../../assets/img/AboutHelp.png'), url:'/'},
+                {name:'关于帮助', img:require('../../assets/img/AboutHelp.png'), url:'/Help'},
             ]
         }
     },
     created(){
         document.title = '我的'
+        this.$store.commit('ACTIVE',4)
     },
     methods: {
         name() {

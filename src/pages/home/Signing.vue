@@ -1,7 +1,7 @@
 <template>
     <div id="Signing">
 
-        <div class="Signing_list" v-for="(item,index) in 5" :key="index">
+        <div class="Signing_list" @click="sign" v-for="(item,index) in 5" :key="index">
             <!-- <img :src="index == 0 ? require('../../assets/img/Not_through.png') : require('../../assets/img/AlreadyPresented.png')" alt=""> -->
             <van-row>
                 <van-col span="4" class="Signing_logo"><img src="../../assets/img/Signing_logo.png" alt=""></van-col>
@@ -29,8 +29,8 @@ export default {
         document.title = '商铺签约'
     },
     methods: {
-        name() {
-            
+        sign() {
+            this.$router.push({path:'/Contract'})
         }
     },
 }

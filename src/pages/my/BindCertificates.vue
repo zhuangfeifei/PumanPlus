@@ -3,13 +3,13 @@
 
         <div class="BindCertificates_content">
             <div class="BindCertificates_list">
-                <p>手机号码</p><p class="list_ringht">12321321321</p>
+                <p>手机号码</p><p class="list_ringht">{{bindList.phone}}</p>
             </div>
             <div class="BindCertificates_list">
                 <span>业主姓名</span><input class="list_ringht" type="text" placeholder="请输入">
             </div>
             <div class="BindCertificates_list">
-                <span>证件类型</span><div class="list_ringhts" @click="isShow">{{identType ? identType : '请选择'}}</div>
+                <span>证件类型</span><div class="list_ringhts" @click="isShow">{{bindList.identType ? bindList.identType : '请选择'}}</div>
             </div>
             <div class="BindCertificates_list">
                 <span>证件号码</span><input class="list_ringht" type="text" placeholder="请输入">
@@ -17,8 +17,8 @@
             <div class="BindCertificates_list BindCertificates_list_">
                 <div><p>买卖合同</p><p class="list_left">上传正反各一张图</p></div>
                 <div class="files_imgs">
-                    <div class="files_imgs_list" v-for="(item,index) in 2" :key="index">
-                        <img src="../../assets/img/1.jpg" alt="">
+                    <div class="files_imgs_list" v-for="(item,index) in bindList.files" :key="index">
+                        <img :src="item.content" alt="">
                         <img @click="deletes(index)" class="delet" src="../../assets/img/deleteImg.png" alt="">
                     </div>
                     <van-uploader :after-read="onRead" accept="image/gif, image/jpeg" :disabled="disabled">
@@ -28,11 +28,17 @@
             </div>
         </div>
 
-        <div class="BindCertificates_btn" :class="{BindCertificates_btn_active: true}" @click="next">提 &nbsp;交</div>
+        <div class="BindCertificates_btn" :class="{BindCertificates_btn_active: isBind}" @click="next">提 &nbsp;交</div>
 
         <van-popup v-model="show" position="bottom" :overlay="true">
             <van-picker class="BindCertificates_" show-toolbar title="证件类型" :columns="documentType" @cancel="onCancel" @confirm="onConfirm" 
                 confirm-button-text="确定" :item-height="50"/>
+        </van-popup>
+
+        <van-popup v-model="success" class="Success">
+            <div>
+                <p>...</p><br><br><p>认证中</p><p>请稍后</p>
+            </div>
         </van-popup>
 
     </div>
@@ -41,39 +47,46 @@
 export default {
     data() {
         return {
-            documentType:[1,2,3], show: false, identType: '', disabled: false
+            documentType:[1,2,3], show: false, disabled: false, isBind: true, success: false,
+            bindList:{ phone:'', identType: '', files:[] }
         }
     },
     components: {
         
     },
     created(){
-        
+        this.bindList.phone = this.$route.query.phone
     },
     methods: {
         isShow(){
             this.show = !this.show
         },
         onConfirm(value, index) {
-            this.identType = value
+            this.bindList.identType = value
             this.isShow()
         },
         onCancel() {
             this.isShow()
         },
         onRead(file){
-            console.log(file)
+            this.bindList.files.push(file)
         },
         deletes(index){
-
+            this.bindList.files.splice(index,1)
         },
         next(){
-            
+            this.success = true
+            setTimeout(()=>{
+                this.$router.push({path:'/BindResult'})
+            },3000)
         }
     },
-    filters: {
-        fnName: function(value) {
-            return value;
+    watch: {
+        bindList:{
+            handler(val,old) {
+                val.files.length >= 2 ? this.disabled = true : this.disabled = false
+            },
+            deep: true
         }
     }
 }
@@ -141,12 +154,64 @@ export default {
 }
 
 .BindCertificates_btn{
-    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 0.01rem 0px rgba(0,0,0,0.3);
+    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
     font-size: 0.36rem; .font1; margin: 0.3rem auto;
     background:rgba(206,206,206,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(0,0,0,0.16);
 }
 .BindCertificates_btn_active{
     background:linear-gradient(90deg,rgba(231,71,68,1),rgba(231,155,153,1))!important;
+}
+
+
+
+
+.Success{
+    width: 100vw; height: 100vh; background: none; text-align: center; color: white; .font1; font-size: 0.36rem;
+    padding-top: 3rem; line-height: 0.48rem; letter-spacing: 0.1rem; overflow: hidden;
+}
+
+
+.Success p:nth-child(1) {
+  -webkit-animation: loader 3s 600ms infinite ease-in-out;
+  animation: loader 3s 600ms infinite ease-in-out;
+}
+
+
+@keyframes loader {
+  0% {
+    opacity: 0;
+    transform: translateX(-1rem) scale(2);
+  }
+  33% {
+    opacity: 1;
+    transform: translateX(0px) scale(3);
+  }
+  66% {
+    opacity: 1;
+    transform: translateX(0px) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(1rem) scale(3);
+  }
+}
+@-webkit-keyframes loader {
+  0% {
+    opacity: 0;
+    transform: translateX(-1rem) scale(2);
+  }
+  33% {
+    opacity: 1;
+    transform: translateX(0px) scale(3);
+  }
+  66% {
+    opacity: 1;
+    transform: translateX(0px) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(1rem) scale(3);
+  }
 }
 </style>
 

@@ -19,13 +19,16 @@ export default {
                 { name: '收益', icon: require('../assets/img/bottom_profits.png'), icons: require('../assets/img/bottom_profit.png'), url:'Profit' },
                 { name: '我的', icon: require('../assets/img/bottom_mys.png'), icons: require('../assets/img/bottom_my.png'), url:'My' },
             ],
-            actives:0
+        }
+    },
+    computed:{
+        actives(){
+            return this.$store.state.active
         }
     },
     methods: {
         changes(index){
-            this.actives = index
-            // this.$store.commit('ACTIVE', index)
+            this.$store.commit('ACTIVE', index)
             this.$router.push({path: this.list[index].url})
         }
     },
