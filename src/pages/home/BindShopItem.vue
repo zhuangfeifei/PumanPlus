@@ -5,15 +5,15 @@
         <div class="BindShopItem_">
             <van-row>
                 <van-col span="8"><h4>商铺号</h4></van-col>
-                <van-col span="16">A1002</van-col>
+                <van-col span="16">{{shopdetail.shopNo}}</van-col>
             </van-row>
             <van-row>
                 <van-col span="8"><h4>面积</h4></van-col>
-                <van-col span="16">23.01m2</van-col>
+                <van-col span="16">{{shopdetail.area}}㎡</van-col>
             </van-row>
             <van-row>
                 <van-col span="8"><h4>网签编号</h4></van-col>
-                <van-col span="16">20170101001</van-col>
+                <van-col span="16">{{shopdetail.signNo}}</van-col>
             </van-row>
         </div>
         <p class="BindShopItem_content">合同防伪编号</p>
@@ -33,23 +33,27 @@
 export default {
     data() {
         return {
-            value: '', startValue: '', endValue:''
+            value: ''
         }
     },
     components: {
         
     },
+    beforeCreate(){
+        this.$store.dispatch('shopdetail', this.$route.query.shopId)
+    },
     computed: {
-        
+        shopdetail(){
+            return this.$store.state.shopdetail
+        }
     },
     created(){
-        
-
         
     },
     methods: {
         result(){
-            this.$router.push({path:'/Result', query:{title:'绑定商铺', status: 1}})
+            let list = { id: parseInt(this.$route.query.shopId), antifakeNo: this.value }
+            this.$store.dispatch('bindings', list)
         }
     },
 }

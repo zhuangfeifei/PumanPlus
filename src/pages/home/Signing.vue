@@ -1,12 +1,16 @@
 <template>
     <div id="Signing">
 
-        <div class="Signing_list" @click="sign" v-for="(item,index) in 5" :key="index">
-            <!-- <img :src="index == 0 ? require('../../assets/img/Not_through.png') : require('../../assets/img/AlreadyPresented.png')" alt=""> -->
+        <div class="Signing_list" @click="sign(item.state)" v-for="(item,index) in entrust" :key="index">
             <van-row>
-                <van-col span="4" class="Signing_logo"><img src="../../assets/img/Signing_logo.png" alt=""></van-col>
-                <van-col span="14" class="Signing_num">A1001</van-col>
-                <van-col span="6" class="Signing_status"><img :src="index == 0 ? require('../../assets/img/Signing.png') : require('../../assets/img/Signingend.png')" alt=""></van-col>
+                <van-col span="4" class="Signing_logo"><img :src="require('../../assets/img/Signing_logo'+num()+'.png')" alt=""></van-col>
+                <van-col span="14" class="Signing_num">{{item.shopNo}}</van-col>
+                <van-col span="6" class="Signing_status">
+                    <div v-if="item.state == 1" style="background-color:#FDBB59">已签约</div>
+                    <div v-if="item.state == 2" style="background-color:#E74744">待签约</div>
+                    <div v-if="item.state == 0" style="background-color:#ce9178">待审核</div>
+                    <div v-if="item.state == -1" style="width: 1.6rem; background-color:#3d6ed1">审核未通过</div>
+                </van-col>
             </van-row>
         </div>
 
@@ -22,15 +26,23 @@ export default {
             
         }
     },
+    beforeCreate(){
+        this.$store.dispatch('entrust')
+    },
     computed: {
-        
+        entrust(){
+            return this.$store.state.entrust
+        },
     },
     created(){
         document.title = '商铺签约'
     },
     methods: {
-        sign() {
-            this.$router.push({path:'/Contract'})
+        sign(state) {
+            state == -1 || state == 2 ? this.$router.push({path:'/Contract'}) : ''
+        },
+        num(){
+            return Math.floor(Math.random()*5)
         }
     },
 }
@@ -53,7 +65,10 @@ export default {
     }
     .Signing_num{ padding-left: 0.2rem; font-size: 0.36rem; .font1; line-height: 1.42rem; color:rgba(43,43,43,1); }
     .Signing_status{
-        text-align: center; padding-top: 0.48rem; padding-right: 0.1rem; img{ width: 1.25rem; height: 0.46rem; }
+        padding-top: 0.48rem; padding-right: 0.1rem;
+        div{ 
+            width: 1.25rem; height: 0.46rem; text-align: center; color: white; line-height: 0.46rem; border-radius: 0.23rem; font-size: 0.24rem;
+        }
     }
 }
 

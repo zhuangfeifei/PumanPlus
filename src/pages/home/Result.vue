@@ -5,7 +5,7 @@
 
         <h4 class="result_title">{{status == 1 ? '绑定成功' : '预约成功'}}</h4>
 
-        <router-link v-if="status == 1" to="/BindShops"><div class="result_btns">继续绑定</div></router-link>
+        <!-- <div @click="status == 1 ? $router.replace({path:'/BindShops'}) : ''" class="result_btns">继续绑定</div> -->
         <router-link to="/"><div class="result_btn">返回首页</div></router-link>
 
 

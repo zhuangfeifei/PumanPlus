@@ -5,6 +5,7 @@ const index = resolve => require(['@/pages/index'], resolve)
 
 const Home = resolve => require(['@/pages/home/Home'], resolve)
 const AlreadyPresented = resolve => require(['@/pages/home/AlreadyPresented'], resolve)
+const WithdrawalOf = resolve => require(['@/pages/home/WithdrawalOf'], resolve)
 const Reservation = resolve => require(['@/pages/home/Reservation'], resolve)
 const Result = resolve => require(['@/pages/home/Result'], resolve)
 const Signing = resolve => require(['@/pages/home/Signing'], resolve)
@@ -33,6 +34,8 @@ const Information = resolve => require(['@/pages/my/Information'], resolve)
 const BindCard = resolve => require(['@/pages/my/BindCard'], resolve)
 const Supplement = resolve => require(['@/pages/my/Supplement'], resolve)
 const Help = resolve => require(['@/pages/my/Help'], resolve)
+const BindShopEnd = resolve => require(['@/pages/my/BindShopEnd'], resolve)
+const MyReservation = resolve => require(['@/pages/my/MyReservation'], resolve)
 
 
 Vue.use(Router)
@@ -51,6 +54,7 @@ export default new Router({
       ]
     },
     { path:'/AlreadyPresented', component: AlreadyPresented },
+    { path:'/WithdrawalOf', component: WithdrawalOf },
     { path:'/Reservation', component: Reservation },
     { path:'/Result', component: Result },
     { path:'/Signing', component: Signing },
@@ -73,5 +77,7 @@ export default new Router({
     { path:'/BindResult', component: BindResult },
     { path:'/BindCard', component: BindCard },
     { path:'/Help', component: Help },
+    { path:'/BindShopEnd', component: BindShopEnd },
+    { path:'/MyReservation', component: MyReservation },
   ]
 })

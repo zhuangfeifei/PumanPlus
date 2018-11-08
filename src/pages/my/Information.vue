@@ -3,10 +3,10 @@
 
         <div class="Information_content">
             <div class="Information_list">
-                <span>姓名</span><input class="list_ringht" type="text" placeholder="请输入姓名">
+                <span>姓名</span><input class="list_ringht" type="text" v-model="list.name" placeholder="请输入姓名">
             </div>
             <div class="Information_list">
-                <span>昵称</span><input class="list_ringht" type="text" placeholder="请输入昵称">
+                <span>昵称</span><input class="list_ringht" type="text" v-model="list.nickname" placeholder="请输入姓名">
             </div>
             <div class="Information_list" @click="sexChange">
                 <span>性别</span><p><span class="list_ringhts">{{sex}}</span><img class="list_link" src="../../assets/img/links.png" alt=""></p>
@@ -22,7 +22,7 @@
             </router-link>
         </div>
 
-        <div class="Information_btn" :class="{Information_btn_active: isBind}" @click="next">确 &nbsp;定</div>
+        <div class="Information_btn" @click="next">确 &nbsp;定</div>
 
 
         <actionsheet v-model="sexChecked" :menus="menus" @on-click-menu="sex_click"></actionsheet>
@@ -35,29 +35,32 @@ import { Calendar,Datetime,Actionsheet } from 'vux'
 export default {
     data() {
         return {
-            sexChecked:false, isBind:true,
+            sexChecked:false, isBind:false,
             menus:['保密','男','女'], min:1950, max:2018,integral:'',
-            list:{ name:'', sex:'', birthday:'' }, sex:''
+            list:{ name:'', nickname:'', sex:'', birthday:'' }, sex:''
         }
     },
     components: {
         Calendar,Datetime,Actionsheet
     },
+    computed: {
+        user(){
+            if(this.$store.state.user == '') this.$store.commit('USER')
+            return this.$store.state.user
+        }
+    },
     created(){
+        document.title = '个人信息'
         this.$nextTick(() => {
-            // this.list.name = this.user.name
-            // this.list.birthday = this.user.birthday != '' ? this.user.birthday.substring(0,10) : ''
-            // this.list.sex = this.user.sex
-            // this.sex = this.menus[this.user.sex]
+            // console.log(this.user)
+            this.list.name = this.user.name
+            this.list.nickname = this.user.nickname
+            this.list.birthday = this.user.birthday != '' ? this.user.birthday.substring(0,10) : ''
+            this.list.sex = this.user.sex
+            this.sex = this.menus[this.user.sex]
         })
     },
     methods: {
-        next(){
-            this.success = true
-            // setTimeout(()=>{
-                this.$router.push({path:'/My'})
-            // },3000)
-        },
         sexChange(){
             this.sexChecked = !this.sexChecked
         },
@@ -68,15 +71,10 @@ export default {
         change (value) {
             this.list.birthday = value
         },
+        next(){
+            this.$store.dispatch('personal', this.list)
+        },
     },
-    watch: {
-        bindList:{
-            handler(val,old) {
-                val.files.length >= 2 ? this.disabled = true : this.disabled = false
-            },
-            deep: true
-        }
-    }
 }
 </script>
 <style lang="less" scoped>
@@ -105,7 +103,7 @@ export default {
             color: #E74744!important;
         }
         .list_ringht{
-            color:rgba(59,59,59,1)!important; font-size: 0.28rem;
+            color: #E74744!important; font-size: 0.28rem;
         }
         .list_ringhts{ width: 5rem; color: #E74744; font-size: 0.28rem; text-align: right; }
         .list_link{
@@ -125,10 +123,7 @@ export default {
 .Information_btn{
     width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
     font-size: 0.36rem; .font1; margin: 0.3rem auto;
-    background:rgba(206,206,206,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(0,0,0,0.16);
-}
-.Information_btn_active{
-    background:linear-gradient(90deg,rgba(231,71,68,1),rgba(231,155,153,1))!important;
+    background:linear-gradient(90deg,rgba(231,71,68,1),rgba(231,155,153,1))!important; border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(0,0,0,0.16);
 }
 
 .date{

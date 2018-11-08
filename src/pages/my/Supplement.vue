@@ -6,7 +6,7 @@
                 <span>商铺号</span><div class="list_ringhts"><p>{{bindList.identType ? bindList.identType : '请选择'}}</p><img src="../../assets/img/links.png" alt=""></div>
             </div>
             <div class="Supplement_list_">
-                <div><p>买卖合同</p><p class="list_left">最多添加5张</p></div>
+                <div><p>买卖合同</p><p class="list_left">最多添加1张</p></div>
                 <div class="Supplement_files_imgs">
                     <div class="Supplement_files_imgs_list" v-for="(item,index) in bindList.files" :key="index">
                         <img :src="item.content" alt="">
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="Supplement_btn" :class="{Supplement_btn_active: isBind}" @click="next">提 &nbsp;交</div>
+        <div class="Supplement_btn" :class="{Supplement_btn_active: isBind && disabled}" @click="next">提 &nbsp;交</div>
 
         <van-popup v-model="show" position="bottom" :overlay="true">
             <van-picker class="Supplement_" show-toolbar title="商铺号" :columns="documentType" @cancel="onCancel" @confirm="onConfirm" 
@@ -32,12 +32,27 @@
 export default {
     data() {
         return {
-            documentType:['A1001','A1002','A1003'], show: false, disabled: false, isBind: true, success: false,
-            bindList:{ phone:'', identType: '', files:[] }
+            show: false, disabled: false, isBind: false,
+            bindList:{ shopId:'', files:[] },
         }
     },
     components: {
         
+    },
+    beforeCreate(){
+        this.$store.dispatch('entrust')
+    },
+    computed: {
+        entrust(){
+            return this.$store.state.entrust
+        },
+        documentType(){
+            let documentType = []
+            for(let val of this.entrust){
+                documentType.push(val.shopNo)
+            }
+            return documentType
+        },
     },
     created(){
         document.title = '信息补充'
@@ -49,6 +64,7 @@ export default {
         },
         onConfirm(value, index) {
             this.bindList.identType = value
+            this.bindList.shopId = this.entrust[index].shopId
             this.isShow()
         },
         onCancel() {
@@ -61,16 +77,25 @@ export default {
             this.bindList.files.splice(index,1)
         },
         next(){
-            this.success = true
-            setTimeout(()=>{
-                this.$router.push({path:'/BindResult'})
-            },3000)
+            if(this.isBind && this.disabled) {
+                var formData = new FormData()
+                formData.append('access_type', 'WXH5')
+                formData.append('wxh', this.$store.state.puman_wxh)
+                formData.append('openId', this.$store.state.puman_openId)
+                formData.append('unionId', this.$store.state.puman_unionId)
+                formData.append('shopId	', this.bindList.shopId)
+                for(let val of this.bindList.files){   
+                    formData.append('file', val.file)
+                }
+                this.$store.dispatch('signfile', formData)
+            }
         }
     },
     watch: {
         bindList:{
             handler(val,old) {
-                val.files.length >= 5 ? this.disabled = true : this.disabled = false
+                val.files.length >= 1 ? this.disabled = true : this.disabled = false
+                val.shopId != '' ? this.isBind = true : this.isBind = false
             },
             deep: true
         }

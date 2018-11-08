@@ -6,14 +6,14 @@
                 <head>
                     <title>合同</title>
                 </head>
-                <body style ="font-family: SimSun;" v-for="(item,index) in 1" :key="index">
+                <body v-if="item.state != 1" style ="font-family: SimSun;" v-for="(item,index) in entrust" :key="index">
             <div><strong>委托经营管理合同</strong></div>
             <div id="wt" style="text-align: right;">{{bianhao}}</div>
             <div style="width:100%; height:20px"> </div>
             <div class="jia" style="line-height: 20px;">
-                <div class="jia1"><span>甲方：</span><span>{{bugername}}</span></div>
-                <div class="jia1"><span>身份证号：</span><span>{{identnumber}}</span></div>
-                <div class="jia1"><span>联系电话：</span><span>{{phone}}</span></div>
+                <div class="jia1"><span>甲方：</span><span>{{user.name}}</span></div>
+                <div class="jia1"><span>身份证号：</span><span>{{user.identnumber}}</span></div>
+                <div class="jia1"><span>联系电话：</span><span>{{user.phonenumber}}</span></div>
             </div>
             <div style="width:100%; height:20px"> </div>
             <div class="yi" style="line-height: 20px;">
@@ -26,7 +26,7 @@
             <div class="falv">
     <p>根据《中华人民共和国合同法》及有关法律、法规之规定，甲、乙双方在平等、自愿和协商—致的基础上，特就甲方委托乙方管理经营甲方自有物业之事宜订立本合同，以资共同信守。</p>
     <p>第一条 物业概况</p>
-    <!-- <p> 1.1委托经营管理物业位于江苏省苏州市相城区“<span class="guan">{{item.proname}}</span>”项目<span class="guan">{{item.shopsnumber.substring(0,1)}}</span>馆地上<span class="guan">{{item.shopsnumber.substring(1,2)}}</span>层<span class="guan">{{item.shopsnumber.substring(2,5)}}</span>号单元（以下简称该物业）。</p> -->
+    <p> 1.1委托经营管理物业位于江苏省苏州市相城区“<span class="guan">方圆里</span>”项目<span class="guan">{{item.shopNo.substring(0,1)}}</span>馆地上<span class="guan">{{item.shopNo.substring(1,2)}}</span>层<span class="guan">{{item.shopNo.substring(2,5)}}</span>号单元（以下简称该物业）。</p>
     
     <p> 1.2甲方交付乙方的物业应符合政府部门规定的有关要求，并适合用于本合同所约定的经营用途。</p>
     <div style="width:100%; height:30px"> </div>
@@ -48,7 +48,7 @@
     <p> 第四条 双方收益约定</p>
     <p> 4.1乙方收取该项目所属区域的实际总租金的10%作为管理费，乙方在扣除该项管理费后，应甲方申请，将按甲方在该项目所占物业份额比例（物业份额比例=该物业建筑面积÷该项目统一经营区域建筑面积×位置系数），分配甲方应得的税前收益；其中，自2017年1月1日起，若乙方连续2年税前年收益低于市场平均价值，视为乙方管理不利，甲方有权要求解除合同。</p>
     
-    <div><small>{{page[0]}}/{{page[4]}}</small></div>
+    <div class="aligns"><small>{{page[0]}}/{{page[4]}}</small></div>
 
     <div style="width:100%; height:10px; "></div>
 
@@ -89,7 +89,7 @@
     
     <p> 5.2.5乙方应按照法律规定交纳在经营管理过程中的相关税费。</p>
 
-    <div><small>{{page[1]}}/{{page[4]}}</small></div>
+    <div class="aligns"><small>{{page[1]}}/{{page[4]}}</small></div>
     <div style="width:100%; height:30px"> </div>
     
     <p> 第六条 物业的交付和返还</p>
@@ -120,7 +120,7 @@
     
     <p> 8.1.1该物业占用范围内的土地使用权依法提前收回；</p>
     
-    <div><small>{{page[2]}}/{{page[4]}}</small></div>
+    <div class="aligns"><small>{{page[2]}}/{{page[4]}}</small></div>
 
     <p> 8.1.2该物业因社会公共利益被依法征用的；</p>
     
@@ -157,7 +157,7 @@
 
     <div style="width:100%; height:50px"> </div>
 
-    <div><small>{{page[3]}}/{{page[4]}}</small></div>
+    <div class="aligns"><small>{{page[3]}}/{{page[4]}}</small></div>
     
     <p> 第十二条 附则</p>
     <p> 12.1本合同未尽事宜，经双方协商一致，可订立补充条款，该补充条款作为对本合同的修正；</p>
@@ -177,7 +177,7 @@
                 <section id="kongge"></section>
                 <div class="zhang1">乙方盖章：</div>
                 <div class="zhang">
-                    <!-- <img src="../../assets/img/qianming/zhang.jpg" alt="乙方盖章"> -->
+                    <img src="../../assets/img/zhang.jpg" alt="乙方盖章">
                 </div>
             </div>
 
@@ -186,27 +186,25 @@
             </div>
             <footer>
                 <div id="ge"></div>
-                <div><small>{{page[4]}}/{{page[4]}}</small></div>
+                <div class="aligns"><small>{{page[4]}}/{{page[4]}}</small></div>
             </footer>
             <div style="width:100%; height:50px"> </div>
         </body>
     </html>
         </div>
-
         <div class="qianming">
-            <button @click="qianming" type="button" class="btn btn-danger">重新签名</button>
+            <div @click="signSubmit" class="btn">提交</div>
             
-            <button @click="qianming" type="button" class="btn btn-info">签名</button>
+            <button @click="Thesignature" type="button" class="btn">签名</button>
 		</div>
 
         <van-popup v-model="show" position="right">
             <div id="mycanvass">
-                <canvas id="canvas"></canvas>
-                <div class="canvas_title">请横至正楷签名</div>
-                <div class="s">
-                    <button class="mycanvas_button" @click="a">清除</button>
-                    <p class="mycanvas_p" @click="b">图片</p>
-                    <p class="mycanvas_g" @click.stop="g">关闭</p>
+                <div class="js-signature" data-width="370" data-height="600"></div>
+                <!-- <div class="canvas_title">请横至正楷签名</div> -->
+                <div class="Thesignatures">
+                    <button class="mycanvas_button btn" @click="clearCanvas"><span>取<br>消</span></button>
+                    <button class="mycanvas_g btn" @click="saveSignature"><span>确<br>认</span></button>
                 </div>
             </div>
         </van-popup>
@@ -215,70 +213,133 @@
 </template>
 
 <script>
+import {qianming} from "../../assets/js/jq-signature.js"
+import { setTimeout } from 'timers';
 export default {
     data() {
         return {
-            guan:'111??',guan1:'',guan2:'',guan3:'',proname:'',shopsid:[],img:'',imgData:'',
-                sha1_hashs:'',phone:'',identnumber:'',bugername:'',date:'',bianhao:'',page:[1,2,3,4,5],
-                sign_list:'',
-                show:false,oCanvas:''
+            proname:'',shopsid:[],img:'',imgData:'',
+            date:'',bianhao:'',page:[1,2,3,4,5],
+            show:false,img:''
         }
     },
     components: {
         
     },
+    beforeCreate(){
+        this.$store.dispatch('user')
+    },
     computed: {
-        
+        user(){
+            return this.$store.state.user
+        },
+        entrust(){
+            return this.$store.state.entrust
+        },
     },
     created(){
         // document.title = ''
-        console.log(this.guan.indexOf('?'))
+        this.$nextTick(()=>{
+            for( let val of this.entrust){
+                val.state != 1 ? this.shopsid.push(val.shopId) : ''
+            }
+        })
     },
     methods: {
-        qianming() {
+        Thesignature() {
+            this.clearCanvas()
+            setTimeout(()=>{
+                $('.js-signature').jqSignature()
+                $('.js-signature').on('jq.signature.changed', function() {
+                    $('#saveBtn').attr('disabled', false)
+                })
+            },100)
+        },
+        clearCanvas(){
             this.show = !this.show
-            this.$nextTick(()=>{
-                /** 侦听touchstart事件 **/
-                document.body.addEventListener('touchstart',function(){
-                    event.preventDefault();//手指滑动时，浏览器会上下左右翻屏
-                });
-                this.oCanvas =document.getElementById("canvas");
-                var oCanvas = this.oCanvas
-                oCanvas.width =document.body.clientWidth;
-                oCanvas.height =document.body.clientHeight;
-                var cxt =oCanvas.getContext("2d");
-                cxt.lineWidth =2;
-                var posX =0;//x坐标
-                var posY =0;//y坐标
-                var position =null;
-
-                //手指触摸屏幕可记录此时的位置作为起点
-                oCanvas.addEventListener("touchstart",function(){
-                    posX = event.changedTouches[0].clientX;
-                    posY = event.changedTouches[0].clientY;
-
-                    cxt.moveTo(posX,posY);
-                });
-
-                //手指屏滑动画线
-                oCanvas.addEventListener("touchmove",function(){
-                    posX = event.changedTouches[0].clientX;
-                    posY = event.changedTouches[0].clientY;
-                    cxt.lineTo(posX,posY);
-                    cxt.stroke();
-                });
-            })
+            $('.js-signature').jqSignature('clearCanvas')
+            $('#saveBtn').attr('disabled', true);
         },
-        a(){
-            // cxt.clearRect(0,0,oCanvas.width,oCanvas.height);
-            this.oCanvas.height = this.oCanvas.height;
-        },
-        b(){
-            console.log(this.oCanvas.toDataURL("image/png"))
-        },
-        g(){
-            // alert('1')
+        saveSignature(){
             this.show = !this.show
+            $('.signature').empty();
+            var dataUrl = $('.js-signature').jqSignature('getDataURL')
+            var img = $('<img style="width:50vw;heigth:30vw"/>').attr('src', dataUrl)
+            $('.signature').append(img)
+            this.img = dataUrl
+        },
+        signSubmit(){
+            this.img != '' ? this.signSubmits() : ''
+        },
+        signSubmits(){
+            // 时间
+            var date = new Date()
+            var year = date.getFullYear()
+            var month  = (date.getMonth() + 1)
+            var day = date.getDate()
+            var hour = date.getHours()
+            var minute = date.getMinutes()
+            var seconds = date.getSeconds()
+
+            // 时间
+            var time = year + '-' + this.jialing(month) + '-' + this.jialing(day) + ' ' + this.jialing(hour) + ':' + this.jialing(minute) + ':' + this.jialing(seconds)
+            // 合同编号
+            var bianhao = 'WT' + year + this.jialing(month) + this.jialing(day) + this.jialing(hour) + this.jialing(minute) + this.jialing(seconds)
+            // console.log('时间--'+time + '---合同编号--'+bianhao)
+            this.bianhao = bianhao
+            this.date = year+'年'+this.jialing(month)+'月'+this.jialing(day)+'日'
+            // 商铺id
+            var shopsid = this.shopsid.join(',')
+            // 图片
+            var pngstr = this.img.substring(22,)
+            // console.log(pngstr)
+            // pngstr = new Blob([written], { type: "img/png"})
+            // 文本
+
+            var $Blob= this.getBlobBydataURI(this.img,'image/jpeg');
+            setTimeout(()=>{
+                var content1 = $('#myCanvas').html()
+                var imgData = this.imgData
+                var content = content1.replace(/><\/div> <section/g,'/></div> <section style="width:100px; height: 200px; float:left"').replace(/alt="乙方盖章"><\/div><\/div>/g,'alt="乙方盖章"/></div></div>')
+                    .replace(/class="signature"><img style="width:50vw;heigth:30vw"/g,'class="signature"><img style="width:150px;heigth:150px; transform: rotate(-90deg);"')
+                    .replace(/class="signature">/g,'class="signature" style="float:left">')
+                    .replace(/>甲方签名：/g,' style="float:left">甲方签名：')
+                    .replace(/class="zhang">/g,'class="zhang" style="float:left">')
+                    .replace(/><strong/g,' style="width:100%; text-align: center;"><strong')
+                    .replace(/><small/g,' style="width:100%; text-align: center; font-size:20px"><small')
+                    .replace(/id="ge"/g,'style="width:100%; height: 500px;" id="ge"')
+                    .replace(/class="zhang1"/g,'style="float:left;" class="zhang1"')                        
+                    // console.log(content)
+                content = new Blob([content], { type: "text/html" })
+                // 创建 formData 对象
+                var formData = new FormData()
+                formData.append('access_type', 'WXH5')
+                formData.append('wxh', this.$store.state.puman_wxh)
+                formData.append('openId', this.$store.state.puman_openId)
+                formData.append('unionId', this.$store.state.puman_unionId)
+                formData.append('operaTime', time)
+                formData.append('written', $Blob ,"file_"+Date.parse(new Date())+".jpeg")
+                formData.append('pngstr', pngstr)
+                formData.append("content", content, "text.html")
+                formData.append('entrustNo', bianhao)
+                formData.append('shopIds', shopsid)
+                this.$store.dispatch('sign', formData)
+            },500)
+        },
+        jialing(num){
+            if (num < 10) {
+                return String(String(0) + String(num))
+            }else{
+                return num
+            }
+        },
+        getBlobBydataURI(dataURI,type) {
+            var binary = atob(dataURI.split(',')[1]);
+            var array = [];
+            for(var i = 0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i));
+            }
+            return new Blob([new Uint8Array(array)], {type:type });
         }
     },
 }
@@ -294,28 +355,9 @@ export default {
 .font3{ font-family:PingFang-SC-Regular; font-weight:Regular; }
 
 
-#mycanvass{
-    width: 100vw; height: 100vh; position: relative;
-    // overflow: hidden;
-    #canvas{    
-        // width: 100vw; height: 10vh;
-        position: absolute; top: 0; left: 0; background-color: white; 
-    }
-    .canvas_title{ 
-        width: 1rem; height: 100vw; background-color: red; position: absolute; top: 5rem; left: 0; transform-origin: 50% 50%; transform: rotate(90deg); line-height: 1rem;
-    }
-    .s{ 
-        width: 100%; height: 1rem; background-color: red; position: absolute; bottom: 0; left: 0;
-    }
-}
-
-.mycanvas_button{ position: absolute; top: 10px; left: 10px; }
-.mycanvas_p{ position: absolute; top: 10px; left: 100px; }
-.mycanvas_g{ position: absolute; top: 10px; left: 150px; }
-
 /*合同*/
 .hetong{
-    width: 100%; margin-top: 10vw; font-size: 4vw; margin-bottom: 20vw; padding: 3vw;
+    width: 100%; margin-top: 5vw; font-size: 4vw; margin-bottom: 20vw; padding: 3vw;
 }
 strong{
     text-align: center; font-size: 5vw;
@@ -360,6 +402,7 @@ a:focus{
     outline: none;
 }
 
+
 .qianming {
     width: 100%; height: 20vw;
     position: fixed; bottom: 0vw;
@@ -375,14 +418,9 @@ a:focus{
     height: 11vw;
     font-size: 4.3vw;
 }
-.di{
-    position: fixed; bottom: 0; width: 100%; height: 20vw;background-color: white;
-}
 
 
-.js-signature{
-    width: 100%; height: 130vw;
-}
+
 .imgs{
     width: 100%; height: 100vw; margin-top: 2vw; position: relative;
 }
@@ -400,10 +438,25 @@ a:focus{
     width: 90%; height: 90%; margin: 5%;
 }
 
+.aligns{ text-align: center; }
+
+#mycanvass{
+    width: 100vw; height: 100vh; position: relative; overflow: hidden;
+    .js-signature{
+        width: 100vw; height: 100vh; text-align: center;
+    }
+    .Thesignatures{ 
+        width: 100%; height: 1.2rem; position: absolute; bottom: 0; left: 0; box-shadow:0px 3px 10px 0px rgba(178,19,16,0.16); background-color: white;
+        .mycanvas_button{ width: 0.8rem; height: 40vw; margin: 0; transform: rotate(90deg); -webkit-transform:rotate(90deg); position: absolute; left: 1.5rem; top: -0.9rem; }
+        .mycanvas_g{ width: 0.8rem; height: 40vw; margin: 0; transform: rotate(90deg); -webkit-transform:rotate(90deg); position: absolute; right: 1.5rem; top: -0.9rem }
+        
+    }
+}
+
 
 
 .qianming {
-    width: 100%; height: 20vw;
+    width: 100%; height: 1.2rem; box-shadow:0px 3px 20px 0px rgba(178,19,16,0.16);
     position: fixed; bottom: 0vw;
     display: flex;
     justify-content: space-around;
@@ -411,14 +464,14 @@ a:focus{
 }
 
 .btn {
-    display: inline-block; outline:none!important;
-    margin-top: 4.5vw; background-color: burlywood;
-    width: 40vw;
-    height: 11vw;
+    display: inline-block; outline:none!important; 
+    margin-top: 0.2rem;  border:1px solid rgba(231,71,68,1); box-shadow:0px 3px 20px 0px rgba(178,19,16,0.16); border-radius: 0.48rem;
+    width: 40%; color: #E74744; font-family:PingFang-SC-Bold; font-weight:bold; background-color: white;
+    height: 0.8rem; text-align: center; line-height: 0.8rem;
     font-size: 4.3vw;
 }
 .di{
-    position: fixed; bottom: 0; width: 100%; height: 20vw;background-color: white;
+    position: fixed; bottom: 0; width: 100%; height: 20vw; background-color: white;
 }
 
 </style>

@@ -3,14 +3,20 @@
 
         <nav class="my_title">
             <div class="my_">
-                <section><img src="../../assets/img/1.jpg" alt=""></section>
+                <section><img :src="user.avatar" alt=""></section>
                 <div class="my_content">
-                    <p><span>拥之则安</span><router-link to="/Authentication"><img class="my_Authentication" src="../../assets/img/Authentication.png" alt=""></router-link></p>
-                    <p class="my_content_p">您还未进行业主认证</p>
+                    <p>
+                        <span>{{user.nickname}}</span>
+                        <router-link v-if="user.userType != 1" :to="user.phonenumber != '' ? '/Authentication/BindCertificates' :'/Authentication'"><img class="my_Authentication" src="../../assets/img/Authentication.png" alt=""></router-link>
+                        <img v-if="user.userType == 1 && user.isRepresentative == 0" class="my_Authentication my_Authentications" src="../../assets/img/owner.png" alt="">
+                        <img v-if="user.userType == 1 && user.isRepresentative == 1" class="my_Authentication my_Authentications" src="../../assets/img/interests.png" alt="">
+                    </p>
+                    <p v-if="user.userType == 1" class="my_content_p"><span v-if="user.name">{{user.name}}</span>{{user.phonenumber | filter}}</p>
+                    <p v-else class="my_content_p">您还未进行业主认证</p>
                 </div>
             </div>
         </nav>
-        <p class="my_balance"><span>当前余额</span><span>0</span></p>
+        <p class="my_balance"><span>当前余额</span><span>{{user.balance}}</span></p>
 
         <div class="my_list">
             <div class="my_list_" v-for="(item, index) in myList" :key="index">
@@ -34,10 +40,29 @@ export default {
             myList:[
                 {name:'个人信息', img:require('../../assets/img/Personal.png'), url:'/Authentication/Information'},
                 {name:'信息补充', img:require('../../assets/img/information.png'), url:'/Authentication/Supplement'},
-                {name:'已绑商铺', img:require('../../assets/img/TiedShops.png'), url:'/BindShops'},
-                {name:'我的预约', img:require('../../assets/img/MyReservation.png'), url:'/'},
+                {name:'已绑商铺', img:require('../../assets/img/TiedShops.png'), url:'/BindShopEnd'},
+                {name:'我的预约', img:require('../../assets/img/MyReservation.png'), url:'/MyReservation'},
                 {name:'关于帮助', img:require('../../assets/img/AboutHelp.png'), url:'/Help'},
             ]
+        }
+    },
+    beforeCreate(){
+        this.$store.dispatch('user')
+    },
+    computed: {
+        user(){
+            if(this.$store.state.user.userType > 1){
+                this.$dialog.confirm({
+                    title: '业主验证',
+                    message: '您还没有进行业主验证，请前往验证！',
+                    confirmButtonText: '前往'
+                }).then(() => {
+                    this.user.phonenumber.length > 0 ? this.$router.push({path:'/Authentication/BindCertificates'}) : this.$router.push({path:'/Authentication'})
+                }).catch(() => {
+                    
+                });
+            }
+            return this.$store.state.user
         }
     },
     created(){
@@ -49,6 +74,11 @@ export default {
             
         }
     },
+    filters:{
+        filter(val){
+            return `${val.substring(0,3)}****${val.substring(val.length - 4,val.length)}`
+        }
+    }
 }
 </script>
 
@@ -71,18 +101,21 @@ export default {
             img{ width: 100%; height: 100%; border-radius: 50%; border: 0.05rem solid white; }
         }
         .my_content{
-            width: calc(100vw - 1.72rem - 0.3rem - 0.49rem - 0.79rem); height: 100%; margin-left: 0.79rem; padding-top: 0.4rem;
-            span{ font-size: 0.48rem; .font2; color:rgba(255,255,255,1); }
+            width: calc(100vw - 1.72rem - 0.3rem - 0.49rem - 0.4rem); height: 100%; margin-left: 0.4rem; padding-top: 0.4rem;
+            span{ font-size: 0.3rem; .font2; color:rgba(255,255,255,1); line-height: 0.6rem; }
             .my_Authentication{
                 width: 1.8rem; height: 0.6rem; float: right;
             }
-            .my_content_p{ color:rgba(59,59,59,1); .font2; margin-top: 0.2rem; }
+            .my_Authentication,{
+                width: 1.25rem; height: 0.46rem; margin-top: 0.06rem;
+            }
+            .my_content_p{ color:rgba(59,59,59,1); .font2; margin-top: 0.2rem; line-height: 0.6rem; span{ color:rgba(59,59,59,1); margin-right: 0.7rem; } }
         }
     }
 }
 
 .my_balance{
-    text-align: center; padding-left: 0.4rem; margin-top: 0.14rem;
+    padding-left: 2.6rem; margin-top: 0.14rem;
     span:nth-child(1){ color:rgba(0,0,0,1); .font2; margin-right: 0.45rem; }
     span:nth-child(2){ color: #E74744; font-size: 0.36rem; .font1; }
 }

@@ -3,30 +3,32 @@
 
         <div class="BindCard">
             <div class="BindCard_list">
-                <p>选择银行</p><div class="BindCard_list_input"><input type="text" placeholder="请输入银行"></div>
+                <p>选择银行</p><div class="BindCard_list_input"><input type="text" v-model="bankName" placeholder="请输入银行"></div>
             </div>
             <div class="BindCard_list">
-                <p>持卡人姓名</p><div class="BindCard_list_input"><input type="text" placeholder="请正确填写持卡人姓名"></div>
+                <p>持卡人姓名</p><div class="BindCard_list_input"><input type="text" v-model="bindList.realName" placeholder="请正确填写持卡人姓名"></div>
             </div>
             <div class="BindCard_list">
                 <p>银行卡号</p>
                 <div class="BindCard_list_input">
-                    <input type="text" placeholder="添加/扫描银行卡号">
-                    <van-uploader class="BindCard_file" :after-read="onRead" accept="image/gif, image/jpeg">
+                    <input type="text" v-model="bindList.bankNo" placeholder="添加银行卡号">
+                    <!-- <van-uploader class="BindCard_file" :after-read="onRead" accept="image/gif, image/jpeg">
                         <img src="../../assets/img/camera.png" alt="">
-                    </van-uploader>
+                    </van-uploader> -->
                 </div>
             </div>
             <div class="BindCard_list">
                 <p>归属地</p>
                 <div class="BindCard_list_input_address">
-                    <div class="provinces"><input class="province" type="text"></div><span>省</span>
-                    <div class="citys"><input class="city" type="text"></div><span>市</span>
+                    <div class="provinces"><input v-model="bindList.bankProvince" class="province" type="text"></div><span>省</span>
+                    <div class="citys"><input v-model="bindList.bankCity" class="city" type="text"></div><span>市</span>
                 </div>
             </div>
         </div>
 
-        <div class="BindCard_btn" :class="{BindCard_btn_active: phone.length == 11 && code.length == 6}" @click="next">确 &nbsp;定</div>
+        <div class="bankNameList" :class="{bankNameListActive: bankNameList.length > 0}"><p v-for="(item,index) in bankNameList" :key="index" @click="bank(item)">{{item}}</p></div>
+
+        <div class="BindCard_btn" :class="{BindCard_btn_active: isBind}" @click="next">确 &nbsp;定</div>
 
     </div>
 </template>
@@ -34,33 +36,62 @@
 export default {
     data() {
         return {
-            phone:'', code:'', disabled: false, time: 180
+            bindList:{realName:'', bankNo:'', bankName:'', bankProvince:'', bankCity:'', id:''}, bankName:'', bankNameList:[], isBind: false
         }
     },
     components: {
         
     },
+    computed: {
+        user(){
+            if(this.$store.state.user == '') this.$store.commit('USER')
+            return this.$store.state.user
+        }
+    },
     created(){
         document.title = '绑定银行卡'
+
+        this.$nextTick(()=>{
+            this.bindList.realName = this.user.name
+        })
     },
     methods: {
-        getCode(){
-            this.disabled = true
-            let interval = window.setInterval(()=> {
-                if ((this.time--) <= 0) {
-                    this.time = 180
-                    this.disabled = false
-                    window.clearInterval(interval)
-                }
-            }, 1000)
-        },
         next(){
-            this.phone.length == 11 && this.code.length == 6 ? this.$router.push({path:'/Authentication/BindCertificates', query:{phone:this.phone}}) : ''
+            // var list = {realName: this.realName, bankNo: this.bankNo, bankProvince: this.bankProvince, bankName: this.bankName, bankCity: this.bankCity}
+            this.bindList.bankName = this.bankName
+            this.$store.dispatch('bank', this.bindList)
         },
-        onRead(file){
-            console.log(file)
-        },
+        // onRead(file){
+        //     console.log(file)
+        // },
+        bank(item){
+            this.bankName = item 
+            setTimeout(()=>{
+                this.bankNameList = []
+            },100)
+        }
     },
+    watch:{
+        bankName(val,old){
+            let yhName = {
+                '北京银行':'BJYH','工商银行':'GSYH','光大银行':'GDYH','华夏银行':'HXYH','建设银行':'JSYH','交通银行':'JTYH','民生银行':'MSYH','南京银行':'NJYH','宁波银行':'NBYH',
+                '农业银行':'NYYH','浦发银行':'PFYH','深圳发展银行':'SZFZYH','兴业银行':'XYYH','邮政银行':'YZYH','招商银行':'ZSYH','中国银行':'ZGYH','中信银行':'ZXYH'
+            };
+            let bankNameList = []
+            for(let key in yhName){
+                if(key.indexOf(val) >= 0){
+                    bankNameList.push(key)
+                }
+            }
+            this.bankNameList = bankNameList
+        },
+        bindList:{
+            handler(val,old) {
+                val.realName != '' && val.bankNo != '' && val.bankProvince != '' && this.bankName != '' && val.bankCity != '' ? this.isBind = true : this.isBind = false
+            },
+            deep: true
+        }
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -76,7 +107,7 @@ export default {
 .BindCard{
     width: 100%; height: 3.98rem; background:rgba(246,246,246,1); padding: 0.3rem 0.3rem; overflow: hidden;
     .BindCard_list{
-        width: 100%; height: 0.62rem; display: flex; justify-content: space-between; margin-bottom: 0.3rem;
+        width: 100%; height: 0.62rem; display: flex; justify-content: space-between; margin-bottom: 0.3rem; position: relative;
         p{ line-height: 0.62rem; font-size: 0.28rem; .font2; color:rgba(0,0,0,1); }
         .BindCard_list_input,.BindCard_list_input_address{
             width: 4.84rem; height: 100%; border-radius: 0.1rem; outline: none!important; background:rgba(255,255,255,1); border:0.01rem solid rgba(206,206,206,1);
@@ -103,6 +134,16 @@ export default {
         }
     }
 }
+
+
+
+.bankNameList{
+    width: 4.7rem; max-height: 4.8rem; position: absolute; top: 1.95rem; right: 0.37rem; background-color: white; z-index: 2; padding: 0 0.3rem;
+    overflow-y: auto;
+    p{ line-height: 0.6rem; border-bottom: 0.01rem solid #CECECE; }
+    p:last-child{ border: 0; }
+}
+.bankNameListActive{ border: 0.01rem solid #CECECE; }
 
 
 .BindCard_btn{

@@ -10,7 +10,17 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      "/pumanplus":{       
+        target:"http://192.168.1.120/pm",  
+        // target:"http://192.168.1.137:8013/pm",  
+        // target:"http://www.homeamc.cn",
+    		changeOrigin: true,
+    		pathRewrite: {
+          '^/pumanplus': ''
+        }
+      } 
+    },
 
     // Various Dev Server settings
     host: '192.168.1.53', // can be overwritten by process.env.HOST

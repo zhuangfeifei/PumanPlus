@@ -1,23 +1,23 @@
 <template>
-    <div id="Profit">
+    <div id="Profit" v-if="profitlist != ''">
 
         <nav class="Profitback">
             <span>累计收益（元）</span>
-            <h5>5000.00</h5>
+            <h5>{{profitlist.info.totalIncome}}</h5>
             <div class="Profit_">
-                <div><p>¥100.00</p><span>已提现</span><section></section></div>
-                <div><p>¥50.00</p><span>提现中</span><section></section></div>
-                <div><p>¥750.00</p><span>可提现</span></div>
+                <div><p>¥{{profitlist.info.applied}}</p><span>已提现</span><section></section></div>
+                <div><p>¥{{profitlist.info.applying}}</p><span>提现中</span><section></section></div>
+                <div><p>¥{{profitlist.info.balance}}</p><span>可提现</span></div>
             </div>
         </nav>
 
 
         <div class="Profit_list">
-            <div class="Profit_list_" v-for="(item,index) in 3" :key="index" @click="details">
-                <div class="Profit_list_title"><span class="Profit_list_num">A1001</span><h4>600.00</h4></div>
-                <div class="Profit_list_content"><span>13.00m2</span><p>产证面积</p></div>
-                <div class="Profit_list_content"><span>0.00m2</span><p>补偿面积</p></div>
-                <div class="Profit_list_content"><span>1.5</span><p>分摊系数</p></div>
+            <div class="Profit_list_" v-for="(item,index) in profitlist.list" :key="index" @click="details(item.shopId)">
+                <div class="Profit_list_title"><span class="Profit_list_num">{{item.shopNo}}</span><h4>{{item.totalIncome}}</h4></div>
+                <div class="Profit_list_content"><span>{{item.area}}㎡</span><p>产证面积</p></div>
+                <div class="Profit_list_content"><span>{{item.compensationArea}}㎡</span><p>补偿面积</p></div>
+                <div class="Profit_list_content"><span>{{item.shareRatio}}</span><p>分摊系数</p></div>
             </div>
         </div>
 
@@ -31,13 +31,21 @@ export default {
             
         }
     },
+    beforeCreate(){
+        this.$store.dispatch('profitlist')
+    },
+    computed: {
+        profitlist(){
+            return this.$store.state.profitlist
+        }
+    },
     created(){
         document.title = '收益'
         this.$store.commit('ACTIVE',3)
     },
     methods: {
-        details() {
-            this.$router.push({path:'/ProfitDetails'})
+        details(id) {
+            this.$router.push({path:'/ProfitDetails',query:{shopId: id}})
         }
     },
 }

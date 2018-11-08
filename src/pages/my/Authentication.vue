@@ -1,7 +1,7 @@
 <template>
     <div id="Authentication">
 
-        <nav class="BindPhone_title"><img src="../../assets/img/1.jpg" alt=""></nav>
+        <nav class="BindPhone_title"><img :src="user.avatar" alt=""></nav>
 
         <router-view></router-view>
 
@@ -16,6 +16,12 @@ export default {
     },
     components: {
         
+    },
+    computed: {
+        user(){
+            if(this.$store.state.user == '') this.$store.commit('USER')
+            return this.$store.state.user
+        }
     },
     created(){
         document.title = '业主认证'

@@ -4,14 +4,14 @@
         <nav class="home_top">
             <div class="home_circle">
                 <x-circle :percent="percent" :stroke-width="6" :trail-width="6" :stroke-color="['#FDBB59', '#E74744']" trail-color="rgba(0,0,0,0.05)">
-                    <p><countup :end-val="count" :duration="0.7" :decimals="2" class="demo1"></countup></p>
+                    <p><countup v-if="totalIncome >= 0" :end-val="totalIncome" :duration="0.7" :decimals="2" class="demo1"></countup></p>
                     <span>总收益</span>
                 </x-circle>
             </div>
             <div class="Home_presented">
-                <router-link to="/AlreadyPresented"><div class="Already_presented">¥100.00</div></router-link>
-                <div class="Canbe_presented">¥50.00</div>
-                <div class="Inthe_presented">¥750.00</div>
+                <router-link to="/AlreadyPresented"><div class="Already_presented">¥{{index.applied}}</div></router-link>
+                <div class="Canbe_presented">¥{{index.balance}}</div>
+                <router-link to="/WithdrawalOf"><div class="Inthe_presented">¥{{index.applying}}</div></router-link>
             </div>
         </nav>
 
@@ -34,14 +34,22 @@ export default {
                 { img:require('../../assets/img/bind_shops.png'), url:'/BindShops'},
                 { img:require('../../assets/img/Rent_extraction.png'), url:'/RentExtraction'},
             ],
-            percent: 0, count: 1000.86,
+            percent: 0,
         }
     },
     components: {
         XCircle,Countup
     },
+    beforeCreate(){
+        this.$store.dispatch('index')
+    },
     computed: {
-        
+        index(){
+            return this.$store.state.index
+        },
+        totalIncome(){
+            return parseFloat(this.index.totalIncome)
+        }
     },
     created(){
         document.title = '扑满'

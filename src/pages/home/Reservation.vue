@@ -13,7 +13,7 @@
             </van-row>
             <van-row>
                 <van-col span="6"><h4>预约内容</h4></van-col>
-                <van-col span="18" class="textarea_"><textarea name="" id=""  style="resize:none" ></textarea></van-col>
+                <van-col span="18" class="textarea_"><textarea v-model="content" style="resize:none" ></textarea></van-col>
             </van-row>
         </div>
 
@@ -28,7 +28,7 @@ import { DatetimeRange } from 'vux'
 export default {
     data() {
         return {
-            value: '', startValue: '', endValue:''
+            value: '', startValue: '', endValue:'', content:''
         }
     },
     components: {
@@ -41,19 +41,21 @@ export default {
         document.title = '商铺预约'
 
         let myDate = new Date()
-        this.value = `${this.checkTime(myDate.getMonth()+1)}月${this.checkTime(myDate.getDate())}日 ${this.checkTime(myDate.getHours())}:${this.checkTime(myDate.getMinutes())}`
+        this.value = `${this.checkTime(myDate.getFullYear())}-${this.checkTime(myDate.getMonth()+1)}-${this.checkTime(myDate.getDate())} ${this.checkTime(myDate.getHours())}:${this.checkTime(myDate.getMinutes())}`
         this.startValue = `${(myDate.getFullYear())}-${this.checkTime(myDate.getMonth()+1)}-${this.checkTime(myDate.getDate())}`
         this.endValue = `${myDate.getFullYear()}-12-30`
     },
     methods: {
         onChange (val) {
-            this.value = `${val[0].substring(5,7)}月${val[0].substring(8,10)}日 ${val[1]}:${val[2]}`
+            let myDate = new Date()
+            this.value = `${this.checkTime(myDate.getFullYear())}-${val[0].substring(5,7)}-${val[0].substring(8,10)} ${val[1]}:${val[2]}`
         },
         checkTime(val){
             return parseInt(val) < 10 ? `0${val}` : val
         },
         result(){
-            this.$router.push({path:'/Result',query:{title:'商铺预约', status: 0}})
+            var list = { time: this.value, remark: this.content }
+            this.$store.dispatch('appointment', list)
         }
     },
 }

@@ -21,7 +21,7 @@
 export default {
     data() {
         return {
-            phone:'', code:'', disabled: false, time: 180
+            phone:'', code:'', disabled: false, time: 120
         }
     },
     components: {
@@ -32,6 +32,7 @@ export default {
     },
     methods: {
         getCode(){
+            this.$store.dispatch('send', this.phone)
             this.disabled = true
             let interval = window.setInterval(()=> {
                 if ((this.time--) <= 0) {
@@ -42,7 +43,8 @@ export default {
             }, 1000)
         },
         next(){
-            this.phone.length == 11 && this.code.length == 6 ? this.$router.push({path:'/Authentication/BindCertificates', query:{phone:this.phone}}) : ''
+            let list ={ phone: this.phone, code: this.code }
+            this.phone.length == 11 && this.code.length == 6 ? this.$store.dispatch('check', list) : ''
         }
     },
 }

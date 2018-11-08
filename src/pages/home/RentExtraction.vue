@@ -1,21 +1,21 @@
 <template>
-    <div id="RentExtraction">
+    <div id="RentExtraction" v-if="user != ''">
 
         <nav class="RentExtraction">
-            <div></div>
-            <div><h5>中国建设银行</h5><p>China Construction Bank</p><span>6111 **** **** 3212</span></div>
+            <div><img :src="yhimg" alt=""></div>
+            <div v-if="user != ''"><h5>{{user.bankCards[0].bankName}}</h5><p>Bank card</p><span>{{user.bankCards[0].bankNo | filter}}</span></div>
         </nav>
 
         <h4>计提金额</h4>
 
         <div class="Amount">
-            <div><span>¥</span><input type="text"><span class="out">全部提现</span></div>
-            <p>可用余额<span>200.00</span>元</p>
+            <div><span>¥</span><input type="text" v-model="value"><span class="out" @click="value = user.balance">全部提现</span></div>
+            <p>可用余额<span>{{index.balance || user.balance}}</span>元</p>
         </div>
         
         <div class="RentExtraction_tip">注：在商城中消费可以免除相应税费</div>
 
-        <router-link to="/PutResult"><div class="RentExtraction_btns">提  交</div></router-link>
+        <div class="RentExtraction_btns" @click="RentExtractionClick">提  交</div>
 
     </div>
 </template>
@@ -24,20 +24,46 @@
 export default {
     data() {
         return {
-            
+            value:'',
+            yhimg:'http://www.homeamc.cn:80/puman/kaptcha/api/YH',
         }
     },
     computed: {
-        
+        user(){
+            if(this.$store.state.user == '') this.$store.commit('USER')
+            return this.$store.state.user
+        },
+        index(){
+            return this.$store.state.index
+        },
     },
     created(){
         document.title = '租金提取'
+
+        this.$nextTick(()=>{
+            let yhName = {
+                '北京银行':'BJYH','工商银行':'GSYH','光大银行':'GDYH','华夏银行':'HXYH','建设银行':'JSYH','交通银行':'JTYH','民生银行':'MSYH','南京银行':'NJYH','宁波银行':'NBYH',
+                '农业银行':'NYYH','浦发银行':'PFYH','深圳发展银行':'SZFZYH','兴业银行':'XYYH','邮政银行':'YZYH','招商银行':'ZSYH','中国银行':'ZGYH','中信银行':'ZXYH'
+            };
+            let bankName = this.$store.state.user.bankCards[0].bankName
+            for(let key in yhName){
+                if(bankName.indexOf(key) >= 0){
+                    this.yhimg = `http://www.homeamc.cn:80/puman/kaptcha/api/${yhName[key]}`
+                    break
+                }
+            }
+        })
     },
     methods: {
-        name() {
-            
+        RentExtractionClick() {
+            this.$store.state.isLoading == false ? this.$store.dispatch('draw', parseFloat(this.value)) : ''
         }
     },
+    filters:{
+        filter(val){
+            return `${val.substring(0,4)} **** **** ${val.substring(val.length - 5,val.length)}`
+        }
+    }
 }
 </script>
 
@@ -55,7 +81,8 @@ export default {
     background: url('../../assets/img/card.png') no-repeat; background-size: 100% 100%; line-height: 0.5rem;
     h5{ .font1; }
     div:nth-child(1){
-        width: 1.8rem; height: 100%;
+        width: 1.8rem; height: 100%; text-align: center; padding-top: 0.4rem;
+        img{ width: 0.88rem; height: 0.88rem; }
     }
     div:nth-child(2){
         width: calc(100% - 1.8rem); height: 100%; padding-top: 0.35rem; .font2;

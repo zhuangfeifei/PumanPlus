@@ -9,27 +9,27 @@
 
         <div v-if="tabShow" class="ShopDetails_">
             <div class="ShopDetails_content">
-                <van-row><van-col span="9"><p>商铺号</p></van-col><van-col span="15"><span>A1002</span></van-col></van-row>
-                <van-row><van-col span="9"><p>面积</p></van-col><van-col span="15"><span>23.01m2</span></van-col></van-row>
-                <van-row><van-col span="9"><p>网签编号</p></van-col><van-col span="15"><span>20170101001</span></van-col></van-row>
-                <van-row><van-col span="9"><p>单价(元)</p></van-col><van-col span="15"><span>1010.00</span></van-col></van-row>
-                <van-row><van-col span="9"><p>单价(元)</p></van-col><van-col span="15"><span>1010.00</span></van-col></van-row>
-                <van-row><van-col span="9"><p>权益人</p></van-col><van-col span="15"><span>王默默</span></van-col></van-row>
-                <van-row><van-col span="9"><p>是否签约</p></van-col><van-col span="15"><span>已签约</span></van-col></van-row>
+                <van-row><van-col span="9"><p>商铺号</p></van-col><van-col span="15"><span>{{shopdetail.shopNo}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>面积</p></van-col><van-col span="15"><span>{{shopdetail.area + '㎡'}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>网签编号</p></van-col><van-col span="15"><span>{{shopdetail.signNo}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>单价(元)</p></van-col><van-col span="15"><span>{{shopdetail.price}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>总价(元)</p></van-col><van-col span="15"><span>{{shopdetail.totalPrice}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>权益人</p></van-col><van-col span="15"><span>{{shopdetail.representMan}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>是否签约</p></van-col><van-col span="15"><span>{{shopdetail.isEntrust}}</span></van-col></van-row>
             </div>
             <div class="ShopDetails_contents">
-                <van-row><van-col span="9"><p>房产证编号</p></van-col><van-col span="15"><span>20170101001</span></van-col></van-row>
-                <van-row><van-col span="9"><p>土地证编号</p></van-col><van-col span="15"><span>20170101001</span></van-col></van-row>
-                <van-row><van-col span="9"><p>不动产证编号</p></van-col><van-col span="15"><span>20170101001</span></van-col></van-row>
+                <van-row><van-col span="9"><p>房产证编号</p></van-col><van-col span="15"><span>{{shopdetail.produceNo}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>土地证编号</p></van-col><van-col span="15"><span>{{shopdetail.landNo}}</span></van-col></van-row>
+                <van-row><van-col span="9"><p>不动产证编号</p></van-col><van-col span="15"><span>{{shopdetail.estateNo}}</span></van-col></van-row>
             </div>
         </div>
 
         <div v-else class="ShopDetails_Buyer">
-            <div class="ShopDetails_Buyer_list" v-for="(item,index) in 4" :key="index">
-                <p><img src="../../assets/img/user.png" alt=""><span>王某某</span></p>
-                <p><img src="../../assets/img/phone.png" alt=""><span>130****001</span></p>
-                <p><img src="../../assets/img/ID.png" alt=""><span>32110*******10001</span></p>
-                <div v-if="index == 0" class="ShopDetails_Buyer_status">权益人</div>
+            <div class="ShopDetails_Buyer_list" v-for="(item,index) in shopdetail.customers" :key="index">
+                <p><img src="../../assets/img/user.png" alt=""><span>{{item.ownerName}}</span></p>
+                <p><img src="../../assets/img/phone.png" alt=""><span>{{item.phoneNumber | filterphone}}</span></p>
+                <p><img src="../../assets/img/ID.png" alt=""><span>{{item.cardNumber | filterid}}</span></p>
+                <div v-if="shopdetail.representMan === item.ownerName" class="ShopDetails_Buyer_status">权益人</div>
             </div>
         </div>
 
@@ -43,8 +43,13 @@ export default {
             tabShow:true
         }
     },
+    beforeCreate(){
+        this.$store.dispatch('shopdetail', this.$route.query.shopId)
+    },
     computed: {
-        
+        shopdetail(){
+            return this.$store.state.shopdetail
+        }
     },
     created(){
         document.title = '商铺详情'
@@ -57,6 +62,12 @@ export default {
     filters: {
         fnName: function(value) {
             return value < 10 ? '0'+value : value
+        },
+        filterphone(val){
+            return `${val.substring(0,3)}****${val.substring(val.length - 4,val.length)}`
+        },
+        filterid(val){
+            return `${val.substring(0,4)}*******${val.substring(val.length - 4,val.length)}`
         }
     }
 }

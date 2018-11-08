@@ -1,27 +1,27 @@
 <template>
-    <div id="ProfitDetails">
+    <div id="ProfitDetails" v-if="profitdetail != ''">
 
         <nav class="ProfitDetails_nav">
             <van-row>
-                <van-col span="4"><img src="../../assets/img/shop.png" alt=""></van-col><van-col span="6"><p>A1002</p></van-col>
+                <van-col span="4"><img src="../../assets/img/Signing_logo3.png" alt=""></van-col><van-col span="6"><p>{{profitdetail.info.shopNo}}</p></van-col>
             </van-row>
             <van-row>
-                <van-col span="4"><h1>1</h1></van-col><van-col span="9">当前商铺收益</van-col><van-col span="10"><span>￥2400.00</span></van-col>
+                <van-col span="4"><h1>1</h1></van-col><van-col span="9">当前商铺收益</van-col><van-col span="10"><span>￥{{profitdetail.info.assignMoney}}</span></van-col>
             </van-row>
             <van-row>
-                <van-col span="4"><h1>1</h1></van-col><van-col span="9">补偿收益</van-col><van-col span="10"><span>￥0.00</span></van-col>
+                <van-col span="4"><h1>1</h1></van-col><van-col span="9">补偿收益</van-col><van-col span="10"><span>￥{{profitdetail.info.compensationMoney}}</span></van-col>
             </van-row>
         </nav>
 
         <div class="ProfitDetails_content">
-            <div class="ProfitDetails_list" v-for="(item,index) in 3" :key="index">
-                <h5>2018.09.08</h5>
+            <div class="ProfitDetails_list" v-for="(item,index) in profitdetail.list" :key="index">
+                <h5>{{item.assignDate}}</h5>
                 <div class="ProfitDetails_list_">
                     <van-row>
-                        <van-col span="5" class="ProfitDetails_list_distribution">总分配</van-col><van-col span="19" class="ProfitDetails_list_distribution">￥100000.00</van-col>
+                        <van-col span="5" class="ProfitDetails_list_distribution">总分配</van-col><van-col span="19" class="ProfitDetails_list_distribution">￥{{item.totalAssignMoney}}</van-col>
                     </van-row>
                     <van-row>
-                        <van-col span="5"><p>补偿收益</p></van-col><van-col span="10"><p>￥0.00</p></van-col><van-col span="9"><span>￥800.00</span></van-col>
+                        <van-col span="5"><p>补偿收益</p></van-col><van-col span="10"><p>￥{{item.compensationMoney}}</p></van-col><van-col span="9"><span>￥{{item.assignMoney}}</span></van-col>
                     </van-row>
                 </div>
             </div>
@@ -35,6 +35,14 @@ export default {
     data() {
         return {
             
+        }
+    },
+    beforeCreate(){
+        this.$store.dispatch('profitdetail', this.$route.query.shopId)
+    },
+    computed: {
+        profitdetail(){
+            return this.$store.state.profitdetail
         }
     },
     created(){

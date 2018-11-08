@@ -2,11 +2,11 @@
     <div id="Shop">
 
         <div v-if="true" class="Shops">
-            <div class="Shop_list" v-for="(item,index) in 5" :key="index" @click="shopDetail">
+            <div class="Shop_list" v-for="(item,index) in shoplist" :key="index" @click="$router.push({path:'/ShopDetails',query:{shopId: item.shopId}})">
                 <van-row>
-                    <van-col span="4" class="Shop_logo"><img src="../../assets/img/Signing_logo.png" alt=""></van-col>
-                    <van-col span="14" class="Shop_num">A1001</van-col>
-                    <van-col span="6" class="Shop_status"><img :src="index == 0 ? require('../../assets/img/Signing.png') : require('../../assets/img/Signingend.png')" alt=""></van-col>
+                    <van-col span="4" class="Shop_logo"><img :src="require('../../assets/img/Signing_logo'+num()+'.png')" alt=""></van-col>
+                    <van-col span="14" class="Shop_num">{{item.shopNo}}</van-col>
+                    <van-col span="6" class="Shop_status"><img :src="item.state == 1 ? require('../../assets/img/Have_net_sign.png') : require('../../assets/img/Has_rush.png')" alt=""></van-col>
                 </van-row>
             </div>
 
@@ -28,16 +28,21 @@ export default {
             
         }
     },
+    beforeCreate(){
+        this.$store.dispatch('shoplist')
+    },
     computed: {
-        
+        shoplist(){
+            return this.$store.state.shoplist
+        }
     },
     created(){
         document.title = '商铺'
         this.$store.commit('ACTIVE',1)
     },
     methods: {
-        shopDetail(){
-            this.$router.push({path:'/ShopDetails'})
+        num(){
+            return Math.floor(Math.random()*5)
         }
     },
 }
