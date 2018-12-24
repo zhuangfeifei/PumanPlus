@@ -8,16 +8,21 @@
                 <van-col span="6" class="BindShopEnd_status"><img src="../../assets/img/bindend.png" alt=""></van-col>
             </van-row>
         </div>
+        <no-data v-if="bindend.length == 0"></no-data>
 
     </div>
 </template>
 
 <script>
+import NO from '@/components/_nodata'
 export default {
     data() {
         return {
             
         }
+    },
+    components:{
+        'no-data': NO
     },
     beforeCreate(){
         this.$store.dispatch('bindend')

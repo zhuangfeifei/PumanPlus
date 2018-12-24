@@ -13,18 +13,23 @@
                 </van-col>
             </van-row>
         </div>
+        <no-data v-if="entrust.length == 0"></no-data>
 
-        <p class="tip">温馨提示：只有签约后才能看到绑定商铺信息!</p>
+        <p v-if="entrust.length > 0" class="tip">温馨提示：只有签约后才能看到绑定商铺信息!</p>
 
     </div>
 </template>
 
 <script>
+import NO from '@/components/_nodata'
 export default {
     data() {
         return {
             
         }
+    },
+    components:{
+        'no-data': NO
     },
     beforeCreate(){
         this.$store.dispatch('entrust')
@@ -39,7 +44,7 @@ export default {
     },
     methods: {
         sign(state) {
-            state == -1 || state == 2 ? this.$router.push({path:'/Contract'}) : ''
+            state != -1 || state == 2 ? this.$router.push({path:'/Contract'}) : ''
         },
         num(){
             return Math.floor(Math.random()*5)

@@ -8,16 +8,21 @@
                 <p class="MyReservation_remark">{{item.remark}}</p>
             </div>
         </div>
+        <no-data v-if="myappointment.length == 0"></no-data>
 
     </div>
 </template>
 
 <script>
+import NO from '@/components/_nodata'
 export default {
     data() {
         return {
             
         }
+    },
+    components:{
+        'no-data': NO
     },
     beforeCreate(){
         this.$store.dispatch('myappointment')

@@ -1,11 +1,11 @@
 <template>
-    <div id="Home">
+    <div v-if="index" id="Home">
 
         <nav class="home_top">
             <div class="home_circle">
                 <x-circle :percent="percent" :stroke-width="6" :trail-width="6" :stroke-color="['#FDBB59', '#E74744']" trail-color="rgba(0,0,0,0.05)">
                     <p><countup v-if="totalIncome >= 0" :end-val="totalIncome" :duration="0.7" :decimals="2" class="demo1"></countup></p>
-                    <span>总收益</span>
+                    <span>总租金</span>
                 </x-circle>
             </div>
             <div class="Home_presented">
@@ -41,7 +41,7 @@ export default {
         XCircle,Countup
     },
     beforeCreate(){
-        this.$store.dispatch('index')
+        // this.$store.dispatch('index')
     },
     computed: {
         index(){
@@ -49,10 +49,15 @@ export default {
         },
         totalIncome(){
             return parseFloat(this.index.totalIncome)
+        },
+        user(){
+            return this.$store.state.user
         }
     },
-    created(){
+    mounted(){
         document.title = '扑满'
+        this.$store.state.puman_unionId != null ? this.$store.dispatch('index') : ''
+        // this.$store.dispatch('user')
         let a = setInterval(()=>{
             for(let i = 0; i < 75; i++){
                 this.percent ++

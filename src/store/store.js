@@ -31,6 +31,10 @@ const state = {
     profitdetail: '',       // 查询业主名下所有已网签且已签约的商铺收益列表
     bindend: '',       // 查询已绑定的商铺列表
     myappointment: '',       // 查询业主的预约列表
+    groupKillList: '',       // 秒杀
+    promotionList: '',       // 秒杀
+    image: '',       // 查询商铺的不动产证、土地证等图片附件
+    times:'',
 }
 
 const mutations = {
@@ -54,6 +58,15 @@ const mutations = {
     },
     [types.ACTIVE](state,res){
         state.active = res
+    },
+    PUMAN_WXH(state){
+        state.puman_wxh = Util.getLocal('puman_wxh')
+    },
+    PUMAN_OPENNID(state){
+        state.puman_openId = Util.getLocal('puman_openId')
+    },
+    PUAMN_UNIONID(state){
+        state.puman_unionId = Util.getLocal('puman_unionId')
     },
     USER(state){
         state.user = Util.getLocal('user')
@@ -91,22 +104,50 @@ const mutations = {
     MYAPPOINTMENT(state, res){
         state.myappointment = res
     },
+    GROUPKILL_LIST(state){
+        state.groupKillList = Util.getLocal('groupKillList')
+    },
+    PROMORION_LIST(state, res){
+        state.promotionList = res
+    },
+    IMAGE(state, res){
+        state.image = res
+    },
+    TIMES(state){
+        var date = new Date();
+        var year = date.getFullYear(),
+            month = date.getMonth() + 1,
+            day = date.getDate(),
+            hours = date.getHours(),
+            minutes = date.getMinutes(),
+            seconds = date.getSeconds(),
+            vWeek_s = date.getDay()
+        var times = year + "-" + toDub(month) + "-" + toDub(day) + " " + toDub(hours) + ":" + toDub(minutes) + ":" + toDub(seconds)
+        var times1 = year + "." + toDub(month) + "." + toDub(day)
+        function toDub(n) {
+            return n < 10 ? "0" + n : "" + n
+        }
+        var current = Date.parse(new Date(times.replace(/-/g, "/")))
+        var list = { times, times1, current }
+        state.times = list
+    }
 }
 
 const actions = {
-    index({state,commit}){   // 查询业主的累计收益、已提现、提现中、可提现等信息
-        axios.api.post('/api/index/info', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+    index({state,commit,dispatch}){   // 查询业主的累计收益、已提现、提现中、可提现等信息
+        axios.api.post('/pm/api/index/info', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
                 Util.setLocal(res.data.data, 'index')
                 commit('INDEX')
+                dispatch('user')
             }
         })
         .catch(err => console.log(err))
     },
     applied({state,commit}){   // 查询已提现列表
-        axios.api.post('/api/index/applied', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/index/applied', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             limit: 10, current: 1 }) )
         .then(res => {
             // console.log(res.data)   
@@ -118,7 +159,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     applying({state,commit}){   // 查询提现中列表
-        axios.api.post('/api/index/applying', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/index/applying', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -129,7 +170,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     appointment({state}, list){   // 保存商铺预约信息
-        axios.api.post('/api/save/appointment', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/save/appointment', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             appointmentTime: list.time, remark: list.remark }) )
         .then(res => {
             // console.log(res.data)   
@@ -140,7 +181,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     entrust({state,commit}){   // 	查询商铺签约信息列表(只显示已网签的商铺)
-        axios.api.post('/api/index/entrust', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/index/entrust', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -151,7 +192,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     sign({},formData){   // 	查询商铺签约信息列表(只显示已网签的商铺)
-        axios.api.post('/api/save/entrust', formData )
+        axios.api.post('/pm/api/save/entrust', formData )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -162,7 +203,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     binding({state,commit}){   //   查询绑定商铺列表（只显示已网签的，已签约的商铺）
-        axios.api.post('/api/index/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/index/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -173,7 +214,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     bindings({state}, list){   //   绑定商铺
-        axios.api.post('/api/save/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/save/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             shopId: list.id, antifakeNo: list.antifakeNo }) )
         .then(res => {
             // console.log(res.data)   
@@ -184,7 +225,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     draw({state}, value){   //   绑定商铺
-        axios.api.post('/api/save/draw', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/save/draw', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             drawCash: value }) )
         .then(res => {
             // console.log(res.data)   
@@ -195,7 +236,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     shoplist({state,commit}){   //   查询业主名下所有商铺
-        axios.api.post('/api/shop/list', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/shop/list', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -206,7 +247,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     shopdetail({state,commit}, shopId){   //   查询商铺详情
-        axios.api.post('/api/shop/detail', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/shop/detail', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             shopId: shopId }) )
         .then(res => {
             // console.log(res.data)   
@@ -218,7 +259,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     profitlist({state,commit}){   //   查询业主名下所有已网签且已签约的商铺收益列表
-        axios.api.post('/api/income/list', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/income/list', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -229,7 +270,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     profitdetail({state,commit}, shopId){   //   查询商铺详情
-        axios.api.post('/api/income/detail', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/income/detail', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             shopId: shopId }) )
         .then(res => {
             // console.log(res.data)   
@@ -238,18 +279,29 @@ const actions = {
         .catch(err => console.log(err))
     },
     user({state,commit}){   // 查询业主信息	
-        axios.api.post('/api/personal/info', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/personal/info', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
                 Util.setLocal(res.data.data, 'user')
                 commit('USER')
+                if(res.data.data.userType > 1){
+                    Dialog.confirm({
+                        title: '业主验证',
+                        message: '您还没有进行业主验证，请前往验证！',
+                        confirmButtonText: '前往'
+                    }).then(() => {
+                        res.data.data.phonenumber.length > 0 ? router.push({path:'/Authentication/BindCertificates'}) : router.push({path:'/Authentication'})
+                    }).catch(() => {
+                        
+                    });
+                }
             }
         })
         .catch(err => console.log(err))
     },
     bindend({state,commit}){   //   查询已绑定的商铺列表
-        axios.api.post('/api/personal/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/personal/binding', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) commit('BINDEND', res.data.data) 
@@ -257,7 +309,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     personal({state}, list){   //   更新个人信息
-        axios.api.post('/api/save/personal', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/save/personal', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             name: list.name, nickName: list.nickname, sex: list.sex, birthDay: list.birthday }) )
         .then(res => {
             // console.log(res.data)   
@@ -266,10 +318,10 @@ const actions = {
                 router.replace({path:'/My'})
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => {console.log(err)})
     },
     bank({state}, list){   //   更新个人信息
-        axios.api.post('/api/save/bank', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/save/bank', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             bankNo: list.bankNo, bankName: list.bankName, bankCity: list.bankCity, bankProvince: list.bankProvince, realName: encodeURI(list.realName), id: list.id }) )
         .then(res => {
             // console.log(res.data)   
@@ -281,7 +333,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     myappointment({state,commit}){   //   查询业主的预约列表
-        axios.api.post('/api/personal/appointment', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
+        axios.api.post('/pm/api/personal/appointment', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) commit('MYAPPOINTMENT', res.data.data) 
@@ -289,7 +341,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     send({state}, phone){   //   发送短信验证码
-        axios.api.post('/api/system/code/send', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/system/code/send', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             phone: phone, msgType: 3 }) )
         .then(res => {
             // console.log(res.data)   
@@ -298,7 +350,7 @@ const actions = {
         .catch(err => console.log(err))
     },
     check({state}, list){   //   验证手机号及验证码
-        axios.api.post('/api/system/check', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+        axios.api.post('/pm/api/system/check', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             phone: list.phone, code: list.code }) )
         .then(res => {
             // console.log(res.data)   
@@ -306,17 +358,19 @@ const actions = {
         })
         .catch(err => console.log(err))
     },
-    auth({state}, list){   //   身份验证
-        axios.api.post('/api/personal/auth', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+    auth({state,dispatch}, list){   //   身份验证
+        axios.api.post('/pm/api/personal/auth', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             phone: list.phone, buyerName: list.buyerName, cardNo: list.cardNo, cardType: list.cardType }) )
         .then(res => {
             // console.log(res.data)   
-            if(res.data.code == 200) router.replace({path:'/BindResult'}) 
+            if(res.data.code == 200) {
+                router.replace({path:'/BindResult'})
+            } 
         })
         .catch(err => {console.log(err)})
     },
     signfile({}, formData){   //   业主信息补充
-        axios.api.post('/api/save/signfile', formData )
+        axios.api.post('/pm/api/save/signfile', formData )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -326,10 +380,70 @@ const actions = {
         })
         .catch(err => {console.log(err)})
     },
+    groupKillList({commit,state}, shopIds = ''){   // 获取秒杀
+        axios.api.post('/shops/api/gruopKill/groupKillList', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId, 
+            shopId: shopIds, groupType: '', limit: 50, current: 1 }) )
+        .then(res => {
+            // console.log(res.data)   
+            if(res.data.code == 200) {
+                let killTimeLists = {}, dest = []
+                for(let val of res.data.data){
+                    if(!killTimeLists[val.kill_start_time]){
+                        dest.push({ time: val.kill_start_time, data: [val]})
+                        killTimeLists[val.kill_start_time] = val
+                    }else{
+                        for(let old of dest){
+                            if(old.time === val.kill_start_time){
+                                old.data.push(val)
+                                break
+                            }
+                        }
+                    }
+                }
+                // console.log(dest)
+                Util.setLocal(dest.reverse(), 'groupKillList')
+                commit('GROUPKILL_LIST')
+            }
+        })
+        .catch(err => console.log(err))
+    },
+    promotionList({commit,state}){   // 获取秒杀
+        axios.api.post('/shops/api/promotion/promotionList', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId, 
+            limit: 50, current: 1 }) )
+        .then(res => {
+            // console.log(res.data)   
+            if(res.data.code == 200) {
+                // Util.setLocal(dest.reverse(), 'groupKillList')
+                commit('PROMORION_LIST', res.data.data)
+            }
+        })
+        .catch(err => console.log(err))
+    },
+    image({commit,state}, shopId){   // 查询商铺的不动产证、土地证等图片附件
+        axios.api.post('/pm/api/personal/image', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId, shopId: shopId }) )
+        .then(res => {
+            console.log(res.data)   
+            if(res.data.code == 200) {
+                commit('IMAGE', res.data.data)
+            }
+        })
+        .catch(err => console.log(err))
+    },
+    // image({commit,state}, formData){   // 查询商铺的不动产证、土地证等图片附件
+    //     axios.api.post('/shops/api/personal/image', formData )
+    //     .then(res => {
+    //         console.log(res.data)   
+    //         if(res.data.code == 200) {
+    //             // Util.setLocal(dest.reverse(), 'groupKillList')
+    //             // commit('PROMORION_LIST', res.data.data)
+    //         }
+    //     })
+    //     .catch(err => console.log(err))
+    // },
 }
 
 const getters ={
-    htmls: state => state.html.replace(/;/g,'').replace(/&gt/g,'>').replace(/&lt/g,'<').replace(/&apos/g,"'").replace(/&quot/g,"\\")
+    
 }
 
 export default new Vuex.Store({

@@ -7,24 +7,24 @@
         </nav>
 
         <div class="Discount_time">
-            <div class="Discount_time_list" @click="tabTime(index)" v-for="(item,index) in time" :key="index" :class="{active_time:index == tabNum}">
+            <div v-if="index < 4" class="Discount_time_list" @click="tabTime(index)" v-for="(item,index) in killTimeList" :key="index" :class="{active_time:index == tabNum}">
                 <span>{{item.hour}}</span><p>{{item.day}}</p>
             </div>
         </div>
-        <div class="commodity">
-            <div v-for="(item,index) in 3" :key="index">
-                <img src="../../assets/img/1.jpg" alt="">
-                <span>阳澄湖大闸蟹</span>
-                <p>￥388.00</p>
-                <del>￥988.00</del>
+        <div v-if="groupKillList" class="commoditys">
+            <div v-if="index < 3" class="commodity" @click="$router.push('/SecondKill')" v-for="(item,index) in groupKillList[tabNum].data" :key="index">
+                <img :src="imgUrl + item.thumbnail_pic" alt="">
+                <div>{{item.group_name}}</div>
+                <p>￥{{item.kill_amount}}</p>
+                <del>￥{{item.discount}}</del>
             </div>
         </div>
 
         <div class="Discount_activity">
-            <h3>金秋蟹蟹好礼</h3>
-            <img src="../../assets/img/Reservation_banner.png" alt="">
-            <h3>来自澳洲阳光葡萄酒</h3>
-            <img src="../../assets/img/Reservation_banner.png" alt="">
+            <div v-for="(item,index) in promotionList" :key="index">
+                <h3>{{item.title}}</h3>
+                <a href="http://www.homeamc.cn/shops/wx/single/Crab?wxh=sz_fangyuanli"><img :src="imgUrl + item.topchartpic" alt=""></a>
+            </div>
         </div>
 
     </div>
@@ -34,10 +34,30 @@
 export default {
     data() {
         return {
-            time:[
-                {day:'9月13日', hour:'09：00'},{day:'9月14日', hour:'12：00'},{day:'9月15日', hour:'09：30'},{day:'9月16日', hour:'21：00'},
-            ],tabNum:0
+            tabNum:0
         }
+    },
+    beforeCreate(){
+        this.$store.dispatch('groupKillList')
+        this.$store.dispatch('promotionList')
+    },
+    computed: {
+        imgUrl(){
+            return this.$store.state.imgUrl
+        },
+        groupKillList(){
+            return this.$store.state.groupKillList
+        },
+        promotionList(){
+            return this.$store.state.promotionList
+        },
+        killTimeList(){
+            let list = []
+            for(let val of this.groupKillList){
+                list.push({day: `${val.time.substring(5,7)}月${val.time.substring(8,10)}日`, hour: val.time.substring(11,16)})
+            }
+            return list
+        },
     },
     created(){
         document.title = '优惠'
@@ -78,11 +98,12 @@ export default {
         background: url('../../assets/img/active_time.png') no-repeat; background-size: 100% 100%;
     }
 }
-.commodity{
+.commoditys{
     width: 100%; height: 3.25rem; background:rgba(246,246,246,1); padding-top: 0.4rem; display: flex;
-    div{
+    .commodity{
         width: 2.1rem; line-height: 0.35rem; margin-left: 0.3rem;
         img{ width: 100%; height: 1.6rem; border-radius: 0.1rem; }
+        div{ width: 100%; height: 0.4rem; line-height: 0.4rem; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; }
         span{ color:rgba(0,0,0,1); font-size: 0.28rem; .font2; }
         p{ font-size: 0.28rem; color:rgba(231,71,68,1); .font1; }
         del{ font-size: 0.24rem; color:rgba(170,170,170,1); position: relative; top: -0.07rem; }

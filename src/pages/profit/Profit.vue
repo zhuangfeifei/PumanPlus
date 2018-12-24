@@ -2,7 +2,7 @@
     <div id="Profit" v-if="profitlist != ''">
 
         <nav class="Profitback">
-            <span>累计收益（元）</span>
+            <span>总租金（元）</span>
             <h5>{{profitlist.info.totalIncome}}</h5>
             <div class="Profit_">
                 <div><p>¥{{profitlist.info.applied}}</p><span>已提现</span><section></section></div>

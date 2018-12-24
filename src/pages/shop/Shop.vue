@@ -1,7 +1,7 @@
 <template>
     <div id="Shop">
 
-        <div v-if="true" class="Shops">
+        <div v-if="shoplist.length > 0" class="Shops">
             <div class="Shop_list" v-for="(item,index) in shoplist" :key="index" @click="$router.push({path:'/ShopDetails',query:{shopId: item.shopId}})">
                 <van-row>
                     <van-col span="4" class="Shop_logo"><img :src="require('../../assets/img/Signing_logo'+num()+'.png')" alt=""></van-col>

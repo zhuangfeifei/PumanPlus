@@ -16,7 +16,7 @@
                 </div>
             </div>
         </nav>
-        <p class="my_balance"><span>当前余额</span><span>{{user.balance}}</span></p>
+        <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=sz_fangyuanli"><p class="my_balance"><span>账户余额</span><span>{{user.balance}}</span></p></a>
 
         <div class="my_list">
             <div class="my_list_" v-for="(item, index) in myList" :key="index">
@@ -51,17 +51,6 @@ export default {
     },
     computed: {
         user(){
-            if(this.$store.state.user.userType > 1){
-                this.$dialog.confirm({
-                    title: '业主验证',
-                    message: '您还没有进行业主验证，请前往验证！',
-                    confirmButtonText: '前往'
-                }).then(() => {
-                    this.user.phonenumber.length > 0 ? this.$router.push({path:'/Authentication/BindCertificates'}) : this.$router.push({path:'/Authentication'})
-                }).catch(() => {
-                    
-                });
-            }
             return this.$store.state.user
         }
     },

@@ -15,6 +15,7 @@ const BindShopItem = resolve => require(['@/pages/home/BindShopItem'], resolve)
 const RentExtraction = resolve => require(['@/pages/home/RentExtraction'], resolve)
 const PutResult = resolve => require(['@/pages/home/PutResult'], resolve)
 const Contract = resolve => require(['@/pages/home/Contract'], resolve)
+const ShowDetails = resolve => require(['@/pages/home/ShowDetails'], resolve)
 
 const Shop = resolve => require(['@/pages/shop/Shop'], resolve)
 const ShopDetails = resolve => require(['@/pages/shop/ShopDetails'], resolve)
@@ -62,6 +63,7 @@ export default new Router({
     { path:'/RentExtraction', component: RentExtraction },
     { path:'/PutResult', component: PutResult },
     { path:'/Contract', component: Contract },
+    { path:'/ShowDetails', component: ShowDetails },
 
     { path:'/ShopDetails', component: ShopDetails },
 

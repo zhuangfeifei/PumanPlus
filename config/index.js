@@ -12,9 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/pumanplus":{       
-        target:"http://192.168.1.120/pm",  
-        // target:"http://192.168.1.137:8013/pm",  
-        // target:"http://www.homeamc.cn",
+        // target:"http://192.168.1.120",  
+        // target:"http://192.168.1.137:8013",  
+        target:"http://www.homeamc.cn",
     		changeOrigin: true,
     		pathRewrite: {
           '^/pumanplus': ''
@@ -48,12 +48,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, '../pumanplus/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, '../pumanplus'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: 'http://www.homeamc.cn/pm/',
 
     /**
      * Source Maps

@@ -1,5 +1,5 @@
 <template>
-    <div class="bottom">
+    <div v-if="puman_unionId" class="bottom">
         <div class="footer">
             <div v-for="(item,index) in list" :key="index" @click="changes(index)">
                 <img :src="actives == index ? item.icon : item.icons" alt="">
@@ -24,7 +24,10 @@ export default {
     computed:{
         actives(){
             return this.$store.state.active
-        }
+        },
+        puman_unionId(){
+            return this.$store.state.puman_unionId
+        },
     },
     methods: {
         changes(index){

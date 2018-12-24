@@ -10,16 +10,17 @@ export default {
   name: 'App',
   computed:{
     isLoading(){
-      return this.$store.state.isLoading
+      return this.$store.state.puman_unionId == null ? true : false || this.$store.state.isLoading
     }
-  }
+  },
+  
 }
 </script>
 
 <style>
 #app {
     /* 去掉点击事件标签的阴影 */
-    -webkit-tap-highlight-color:rgba(255,255,255,0); 
+    -webkit-tap-highlight-color:rgba(255,255,255,0); min-height: 100vh; background-color: white;
 }
 *{ margin: 0; padding: 0; box-sizing: border-box; font-size: 0.3rem; }
 

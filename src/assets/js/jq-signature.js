@@ -20,7 +20,7 @@
   var pluginName = 'jqSignature',
       defaults = {
         lineColor: '#222222',
-        lineWidth: 1,
+        lineWidth: 5,
         // border: '1px dashed #AAAAAA',
         background: '#FFFFFF',
         // width: '100vw',

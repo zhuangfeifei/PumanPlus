@@ -263,6 +263,7 @@ export default {
         saveSignature(){
             this.show = !this.show
             $('.signature').empty();
+            $('.signature').jqSignature('option', 'syncFormat', 'jpeg');
             var dataUrl = $('.js-signature').jqSignature('getDataURL')
             var img = $('<img style="width:50vw;heigth:30vw"/>').attr('src', dataUrl)
             $('.signature').append(img)
@@ -292,7 +293,6 @@ export default {
             var shopsid = this.shopsid.join(',')
             // 图片
             var pngstr = this.img.substring(22,)
-            // console.log(pngstr)
             // pngstr = new Blob([written], { type: "img/png"})
             // 文本
 

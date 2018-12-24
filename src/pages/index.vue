@@ -1,7 +1,7 @@
 <template>
     <div id="index">
 
-        <router-view></router-view>
+        <router-view v-if="isIf"></router-view>
 
         <bottom-item></bottom-item>
 
@@ -9,6 +9,7 @@
 </template>
 <script>
 import bottom from '@/components/_bottom'
+import { setTimeout } from 'timers';
 export default {
     data() {
         return {
@@ -17,6 +18,21 @@ export default {
     },
     components: {
         "bottom-item": bottom,
+    },
+    computed:{
+        isIf(){
+            if(this.$store.state.puman_unionId != ''){
+                return true
+            }
+        }
+    },
+    created(){
+         
+    },
+    mounted(){
+        if(this.$store.state.puman_unionId == null){
+            this.$router.go(0)
+        }
     },
     methods: {
         

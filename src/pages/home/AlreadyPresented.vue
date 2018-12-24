@@ -1,21 +1,26 @@
 <template>
     <div id="AlreadyPresented">
 
-        <div class="AlreadyPresented_list" v-for="(item,index) in applied.records" :key="index">
+        <div class="AlreadyPresented_list" @click="$router.push({path:'/ShowDetails', query:{drawCash: item.drawCash}})" v-for="(item,index) in applied.records" :key="index">
             <img :src="item.state === '未通过' ? require('../../assets/img/Not_through.png') : require('../../assets/img/AlreadyPresented.png')" alt="">
             <h4><span>¥</span><span>{{item.drawCash}}</span></h4>
             <p><span>{{item.bankName}}</span><span>{{item.bankNo | filter}}</span></p>
         </div>
+        <no-data v-if="applied == ''"></no-data>
 
     </div>
 </template>
 
 <script>
+import NO from '@/components/_nodata'
 export default {
     data() {
         return {
             
         }
+    },
+    components:{
+        'no-data': NO
     },
     beforeCreate(){
         this.$store.dispatch('applied')

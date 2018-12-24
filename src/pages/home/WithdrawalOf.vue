@@ -7,16 +7,21 @@
             <h4><span>¥</span><span>{{item.drawCash}}</span></h4>
             <p><span>{{item.bankName}}</span><span>{{item.bankNo | filter}}</span></p>
         </div>
+        <no-data v-if="applying.length == 0"></no-data>
 
     </div>
 </template>
 
 <script>
+import NO from '@/components/_nodata'
 export default {
     data() {
         return {
             
         }
+    },
+    components:{
+        'no-data': NO
     },
     beforeCreate(){
         this.$store.dispatch('applying')

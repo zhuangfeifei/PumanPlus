@@ -2,25 +2,28 @@
     <div id="SecondKill">
 
         <nav class="SecondKill_time">
-            <div class="SecondKill_time_list" @click="tabTime(index)" v-for="(item,index) in time" :key="index" :class="{active_times:index == tabNum, active_time_after: index > 0}">
-                <p>{{item.day}}</p><span>{{item.hour}}</span><p class="SecondKill_time_list_status">{{index == 0 ? '抢购中' : '即将开始'}}</p>
+            <div class="SecondKill_time_list" @click="tabTime(index)" v-for="(item,index) in killTimeList" :key="index" :class="{active_times: index == tabNum, active_time_after: true}">
+                <p>{{item.day}}</p><span>{{item.hour}}</span><p class="SecondKill_time_list_status">{{item.status == 1 ? '抢购中' : '即将开始'}}</p>
             </div>
         </nav>
-        <div class="Count_down">距离秒杀开始 01：01：01</div>
+        <div v-if="groupKillList[tabNum].data[0].status == 1" class="Count_down">距离秒杀结束 {{(Date.parse(new Date(groupKillList[tabNum].data[0].kill_end_time.replace(/-/g, "/"))) - time.current) | filter}}</div>
+        <div v-else class="Count_down">距离秒杀开始 {{(time.current - Date.parse(new Date(groupKillList[tabNum].data[0].kill_end_time.replace(/-/g, "/")))) | filter}}</div>
 
         <div class="goods_list">
 
-            <div class="goods_list_" v-for="(item,index) in list" :key="index">
-                <div class="goods_list_content">
-                    <section><img src="../../assets/img/1.jpg" alt=""></section>
-                    <div class="goods_list_contents">
-                        <h4>阳澄湖大闸蟹 1088款8只</h4>
-                        <p>¥128 <del>¥198</del></p>
-                        <span>已购{{item.Progressbar}}%</span>
-                        <div class="Progressbar"><div class="Progressbar_" :style="{width: item.Progressbar+'%'}"><div></div></div></div>
-                        <div class="immediately">立即抢购</div>
+            <div class="goods_list_" v-for="(item,index) in groupKillList[tabNum].data" :key="index">
+                <a :href="'http://192.168.1.53:8020/#/Crab?&statusId='+item.id">
+                    <div class="goods_list_content">
+                        <section><img :src="imgUrl + item.thumbnail_pic" alt=""></section>
+                        <div class="goods_list_contents">
+                            <div class="goods_list_contents_name">{{item.group_name}}</div>
+                            <p>¥{{item.kill_amount}} <del>¥{{item.discount}}</del></p>
+                            <span>已购{{item.soldRate}}%</span>
+                            <div class="Progressbar"><div class="Progressbar_" :style="{width: item.soldRate+'%'}"><div></div></div></div>
+                            <div class="immediately">立即抢购</div>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
         </div>
@@ -32,13 +35,35 @@
 export default {
     data() {
         return {
-            time:[
-                {day:'9月13日', hour:'09：00'},{day:'9月14日', hour:'12：00'},{day:'9月15日', hour:'09：30'},{day:'9月16日', hour:'21：00'},
-            ],tabNum:0,
+            tabNum:0,
             list:[
                 {Progressbar: 40},{Progressbar: 80},{Progressbar: 60}
             ]
         }
+    },
+    beforeCreate(){
+        setInterval(()=>{
+            this.$store.commit('TIMES')
+        },1000)
+    },
+    computed:{
+        imgUrl(){
+            return this.$store.state.imgUrl
+        },
+        groupKillList(){
+            if(this.$store.state.groupKillList == ''){ this.$store.commit('GROUPKILL_LIST') }
+            return this.$store.state.groupKillList
+        },
+        killTimeList(){
+            let list = []
+            for(let val of this.groupKillList){
+                list.push({day: `${val.time.substring(5,7)}月${val.time.substring(8,10)}日`, hour: val.time.substring(11,16), status: val.data[0].status})
+            }
+            return list
+        },
+        time(){
+            return this.$store.state.times
+        },
     },
     created(){
         document.title = '秒杀'
@@ -48,6 +73,23 @@ export default {
             this.tabNum = index
         }
     },
+    filters:{
+        filter(value){
+            //计算出相差天数
+            var days = Math.floor(value / (24 * 3600 * 1000))
+            //计算出小时数
+            var leave1 = value % (24 * 3600 * 1000)    //计算天数后剩余的毫秒数
+            var hours = Math.floor(leave1 / (3600 * 1000))
+            //计算相差分钟数
+            var leave2 = leave1 % (3600 * 1000)        //计算小时数后剩余的毫秒数
+            var minutes = Math.floor(leave2 / (60 * 1000))
+            //计算相差秒数
+            var leave3 = leave2 % (60 * 1000)      //计算分钟数后剩余的毫秒数
+            var seconds = Math.round(leave3 / 1000)
+
+            return days + "天 " + hours + "小时 " + minutes + "分钟 " + seconds + "秒"
+        }
+    }
 }
 </script>
 
@@ -72,7 +114,7 @@ export default {
         .SecondKill_time_list_status{ font-size: 0.3rem; .font4; }
     }
     .active_times{
-        background: url('../../assets/img/active_times.png') no-repeat; background-size: 100% 100%;
+        background: url('../../assets/img/active_times.png') no-repeat!important; background-size: 100% 100%!important;
     }
     .active_time_after{
         background: url('../../assets/img/active_time_after.png') no-repeat; background-size: 100% 100%;
@@ -92,7 +134,10 @@ export default {
             section{ width: 1.5rem; height: 100%; img{ width: 100%; height: 100%; } }
             .goods_list_contents{
                 width: calc(100% - 1.5rem - 0.58rem); height: 100%; margin-left: 0.58rem; position: relative;
-                h4{ color:rgba(1,1,1,1); .font2; }
+                .goods_list_contents_name{ 
+                    color:rgba(1,1,1,1); .font2; width: 100%; height: 0.4rem; line-height: 0.4rem;
+                    overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;
+                }
                 p{ font-size: 0.36rem; color:rgba(231,71,68,1); .font1; del{ font-size: 0.28rem; color:rgba(128,128,128,1); .font2; margin-left: 0.1rem; } }
                 span{ font-size: 0.24rem; .font3; line-height: 0.5rem; }
                 .Progressbar{
@@ -112,6 +157,7 @@ export default {
                 }
             }
         }
+        a{ color: #000000; }
     }
 }
 

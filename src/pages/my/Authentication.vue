@@ -33,11 +33,11 @@ export default {
 </script>
 <style lang="less" scoped>
 #Authentication{
-    width: 100%; height: 100%; background-color: white;
+    width: 100%; height: 100%; background-color: white; padding-top: 0.64rem;
 }
 
 .BindPhone_title{
-    width: 1.4rem; height: 1.4rem; margin: 0.64rem auto; 
+    width: 1.4rem; height: 1.4rem; margin: 0 auto;  margin-bottom: 0.64rem;
     img{ width: 100%; height: 100%; border-radius: 50%; }
 }
 </style>

@@ -27,16 +27,44 @@ api.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 api.interceptors.response.use(function (response) {
-
+  
   store.commit('isLoading', false)
 
-  if(response.data.code != 200) Toast.fail(response.data.message)
+  if(response.data.code != 200) {
+    Dialog.alert({
+        title: '温馨提示',
+        message: response.data.message
+    }).then(() => {
+    // on close
+    });
+  }
 
     return response;
 
   }, function (error) {
+    if(error.response.data.code == 400 && error.response.config.url == '/pumanplus/pm/api/index/info'){
+      // alert(store.state.puman_unionId)
+      store.dispatch(index)
+      store.dispatch(user)
+    }else if(error.response.data.code == 405 && error.response.config.url.indexOf('save') >= 0){
+      Dialog.confirm({
+          title: error.response.data.message,
+          message: '',
+          confirmButtonText:'去验证'
+      }).then(() => {
+          store.state.user.phonenumber.length > 0 ? router.push({path:'/Authentication/BindCertificates'}) : router.push({path:'/Authentication'})
+      }).catch(() => {
+          // on cancel
+      });
+    }else{
+      Dialog.alert({
+          title: error.response.data.message || '网络异常！',
+          message: ''
+      }).then(() => {
+      // on close
+      });
+    }
     store.commit('isLoading', false)
-    Toast.fail('网络异常！')
     return Promise.reject(error)
 })
 
