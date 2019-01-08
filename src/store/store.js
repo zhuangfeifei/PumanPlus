@@ -35,11 +35,15 @@ const state = {
     promotionList: '',       // 秒杀
     image: '',       // 查询商铺的不动产证、土地证等图片附件
     times:'',
+    isChangePhone: false
 }
 
 const mutations = {
     isLoading(state,res){
         state.isLoading = res
+    },
+    isChangePhone(state,res){
+        state.isChangePhone = res
     },
     ['SET_PAGE'](state,res){
         state.isPage = res
@@ -224,13 +228,33 @@ const actions = {
         })
         .catch(err => console.log(err))
     },
-    draw({state}, value){   //   绑定商铺
+    draw({state}, value){   //   提现
         axios.api.post('/pm/api/save/draw', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             drawCash: value }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
                 router.replace({path:'/PutResult'})
+            }else if(res.data.code == 210){
+                Dialog.confirm({
+                    title: '温馨提示',
+                    message: res.data.message,
+                    confirmButtonText:'去绑定',
+                }).then(() => {
+                    router.push('/BindCard')
+                }).catch(() => {
+                // on cancel
+                });
+            }else if(res.data.code == 218){
+                Dialog.confirm({
+                    title: '温馨提示',
+                    message: res.data.message,
+                    confirmButtonText:'去消费',
+                }).then(() => {
+                    window.location.href = 'http://www.homeamc.cn/shops/wx/shops?wxh=sz_fangyuanli'
+                }).catch(() => {
+                // on cancel
+                });
             }
         })
         .catch(err => console.log(err))
@@ -327,7 +351,7 @@ const actions = {
             // console.log(res.data)   
             if(res.data.code == 200) {
                 Toast.success('绑定成功!') 
-                router.replace({path:'/My'})
+                router.go(-1)
             }
         })
         .catch(err => console.log(err))
@@ -349,12 +373,21 @@ const actions = {
         })
         .catch(err => console.log(err))
     },
-    check({state}, list){   //   验证手机号及验证码
-        axios.api.post('/pm/api/system/check', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
+    check({state,commit}, list){   //   验证手机号及验证码
+        let urls = state.isChangePhone ? '/pm/api/system/check/again' : '/pm/api/system/check'
+        axios.api.post(urls, $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
             phone: list.phone, code: list.code }) )
         .then(res => {
             // console.log(res.data)   
-            if(res.data.code == 200) router.replace({path:'/Authentication/BindCertificates', query:{phone: list.phone}}) 
+            if(res.data.code == 200) {
+                if(state.isChangePhone){
+                    Toast.success('更换成功！')
+                    commit('isChangePhone', false)
+                    router.go(-1)
+                }else{
+                    router.replace({path:'/Authentication/BindCertificates', query:{phone: list.phone}}) 
+                }
+            }
         })
         .catch(err => console.log(err))
     },
@@ -422,7 +455,7 @@ const actions = {
     image({commit,state}, shopId){   // 查询商铺的不动产证、土地证等图片附件
         axios.api.post('/pm/api/personal/image', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId, shopId: shopId }) )
         .then(res => {
-            console.log(res.data)   
+            // console.log(res.data)   
             if(res.data.code == 200) {
                 commit('IMAGE', res.data.data)
             }

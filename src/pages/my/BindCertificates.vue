@@ -14,13 +14,13 @@
             <div class="BindCertificates_list">
                 <span>证件号码</span><input class="list_ringht" type="text" v-model="bindList.cardNo" placeholder="请输入">
                 <!-- <img class="scanning" src="../../assets/img/scanning.png" alt=""> -->
-                <van-uploader :after-read="onRead" accept="image/gif, image/jpeg">
+                <!-- <van-uploader :after-read="onRead" accept="image/gif, image/jpeg">
                         <img class="scanning" src="../../assets/img/scanning.png" alt="">
-                </van-uploader>
+                </van-uploader> -->
             </div>
             <!-- <div class="BindCertificates_list BindCertificates_list_">
                 <div><p>证件照</p><p class="list_left">上传正反各一张图</p></div>
-                <div class="files_imgs">
+                <div class="files_imgs">                                                                                                   
                     <div class="files_imgs_list" v-for="(item,index) in bindList.files" :key="index">
                         <img :src="item.content" alt="">
                         <img @click="deletes(index)" class="delet" src="../../assets/img/deleteImg.png" alt="">

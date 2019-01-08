@@ -20,6 +20,9 @@
                 <span>银行卡</span><p><span class="list_ringhts">绑定银行卡</span><img class="list_link" src="../../assets/img/links.png" alt=""></p>
             </div>
             </router-link>
+            <div v-if="user.phonenumber != ''" class="Information_list Information_phone" @click="isChangePhone">
+                <span>更换手机号</span><p><img class="list_link" src="../../assets/img/links.png" alt=""></p>
+            </div>
         </div>
 
         <div class="Information_btn" @click="next">确 &nbsp;定</div>
@@ -74,6 +77,10 @@ export default {
         next(){
             this.$store.dispatch('personal', this.list)
         },
+        isChangePhone(){
+            this.$store.commit('isChangePhone', true)
+            this.$router.push('/Authentication')
+        }
     },
 }
 </script>
@@ -88,7 +95,7 @@ export default {
 
 
 .Information_content{
-    width: 100%; height: 6.14rem; background:rgba(246,246,246,1); padding: 0 0.3rem;
+    width: 100%; background:rgba(246,246,246,1); padding: 0 0.3rem;
     .Information_list{
         width: 100%; height: 1.23rem; display: flex; justify-content: space-between; position: relative;
         border-bottom: 0.01rem solid rgba(206,206,206,1); .font2; font-size: 0.28rem;
@@ -111,7 +118,7 @@ export default {
         }
         span:nth-child(2){ text-align: right; }
     }
-    .Information_list:last-child{
+    .Information_phone{
         border: 0;
     }
 }

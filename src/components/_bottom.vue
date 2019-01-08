@@ -31,8 +31,12 @@ export default {
     },
     methods: {
         changes(index){
-            this.$store.commit('ACTIVE', index)
-            this.$router.push({path: this.list[index].url})
+            if(index == 2){
+                window.location.href = 'http://www.homeamc.cn/shops/wx/shops?wxh=sz_fangyuanli'
+            }else{
+                this.$store.commit('ACTIVE', index)
+                this.$router.push({path: this.list[index].url})
+            }
         }
     },
 }

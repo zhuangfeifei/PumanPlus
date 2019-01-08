@@ -16,7 +16,7 @@
                 </div>
             </div>
         </nav>
-        <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=sz_fangyuanli"><p class="my_balance"><span>账户余额</span><span>{{user.balance}}</span></p></a>
+        <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=sz_fangyuanli"><p class="my_balance"><span>账户余额</span><span>{{user.balance || 0}}</span></p></a>
 
         <div class="my_list">
             <div class="my_list_" v-for="(item, index) in myList" :key="index">

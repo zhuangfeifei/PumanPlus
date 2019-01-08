@@ -3,14 +3,19 @@
 
         <nav>提现金额<span>¥{{drawCash}}</span></nav>
         <div class="ShowDetails_content">
-            <div><p>企业税费</p><p>个人税费</p><p>管理费</p><p>管理成本</p></div>
+            <div>
+                <!-- <p>企业税费</p> -->
+                <p>个人税费</p><p>管理费</p><p>管理成本</p>
+            </div>
             <!-- <div><p>增值税 5%</p><p>房产税 3%</p><p>个税 0.5%</p></div> -->
-            <div class="ShowDetails_content_num"><p>¥{{(drawCash/1.05*0.05 + drawCash/1.05*0.05*0.12).toFixed(2)}}</p><p>¥{{((drawCash/1.05*0.05) + (drawCash*0.03) + (drawCash*0.005)).toFixed(2)}}</p><p>以审计报告为主</p><p>以审计报告为主</p></div>
-            <!-- <div class="ShowDetails_content_num"><p>¥{{(drawCash/1.05*0.05).toFixed(2)}}</p><p>¥{{(drawCash*0.03).toFixed(2)}}</p><p>¥{{(drawCash*0.005).toFixed(2)}}</p></div> -->
+            <div class="ShowDetails_content_num">
+                <!-- <p>¥{{(drawCash/1.05*0.05 + drawCash/1.05*0.05*0.12).toFixed(2)}}</p> -->
+                <p>¥{{((drawCash/1.05*0.05) + (drawCash*0.03) + (drawCash*0.005)).toFixed(2)}}</p><p>以审计报告为主</p><p>以审计报告为主</p>
+            </div>
         </div>
         <div class="ShowDetails_amount">
-            <span>实际到账金额</span><p>¥{{(drawCash - parseFloat((drawCash/1.05*0.05 + drawCash/1.05*0.05*0.12) + (drawCash/1.05*0.05) + (drawCash*0.03) + (drawCash*0.005))).toFixed(2)}}</p>
-            <!-- <span>实际到账金额</span><p>¥{{drawCash - (parseFloat((drawCash/1.05*0.05).toFixed(2))+parseFloat((drawCash*0.03).toFixed(2))+parseFloat((drawCash*0.005).toFixed(2))).toFixed(2)}}</p> -->
+            <span>实际到账金额</span><p>¥{{(drawCash - parseFloat((drawCash/1.05*0.05) + (drawCash*0.03) + (drawCash*0.005))).toFixed(2)}}</p>
+            <!-- <span>实际到账金额</span><p>¥{{(drawCash - parseFloat((drawCash/1.05*0.05 + drawCash/1.05*0.05*0.12) + (drawCash/1.05*0.05) + (drawCash*0.03) + (drawCash*0.005))).toFixed(2)}}</p> -->
         </div>
         <!-- <p class="ShowDetails_tip">温馨提示：在商城中消费可以免除相应税费</p> -->
 
@@ -63,7 +68,7 @@ export default {
     span{ margin-left: 0.3rem; color: #E74744; .font1; }
 }
 .ShowDetails_content{
-    width: 100%; height: 2.6rem; background-color: #F6F6F6; padding: 0 0.3rem; display: flex; line-height: 0.6rem; padding-top: 0.1rem;
+    width: 100%; background-color: #F6F6F6; padding: 0.15rem 0.3rem; display: flex; line-height: 0.6rem; padding-top: 0.1rem;
     p{ .font2; }
     .ShowDetails_content_num{ margin-left: 1rem; p{.font3} }
 }

@@ -13,12 +13,18 @@
             <p>可用余额<span>{{index.balance}}</span>元</p>
             <div class="RentExtraction_tax">
                 <van-row>
-                    <van-col span="9"><p>企业税费</p><p>个人税费</p><p>管理费</p><p>管理成本</p><h4>实际到账金额</h4></van-col>
+                    <van-col span="9">
+                        <!-- <p>企业税费</p> -->
+                        <p>个人税费</p><p>管理费</p><p>管理成本</p><h4>实际到账金额</h4>
+                    </van-col>
                     <!-- <van-col span="12"><p>增值税 5%</p><p>房产税 3%</p><p>个税  0.5%</p><h4>实际到账金额</h4></van-col> -->
-                    <van-col span="12" class="RentExtraction_num"><p>¥{{(value/1.05*0.05 + value/1.05*0.05*0.12).toFixed(2)}}</p><p>¥{{((value/1.05*0.05) + (value*0.03) + (value*0.005)).toFixed(2)}}</p>
+                    <van-col span="12" class="RentExtraction_num">
+                        <!-- <p>¥{{(value/1.05*0.05 + value/1.05*0.05*0.12).toFixed(2)}}</p> -->
+                        <p>¥{{((value/1.05*0.05) + (value*0.03) + (value*0.005)).toFixed(2)}}</p>
                         <p class="audit">以审计报告为主</p>
                         <p class="audit">以审计报告为主</p>
-                        <h4>¥{{(value - parseFloat((value/1.05*0.05 + value/1.05*0.05*0.12) + (value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</h4>
+                        <h4>¥{{(value - parseFloat((value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</h4>
+                        <!-- <h4>¥{{(value - parseFloat((value/1.05*0.05 + value/1.05*0.05*0.12) + (value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</h4> -->
                     </van-col>
                 </van-row>
             </div>
@@ -31,10 +37,11 @@
         <van-popup v-model="show" class="RentExtraction_confirms"> 
             <div class="RentExtraction_confirm">
                 <h4>实际到账金额</h4>
-                <p><span>¥</span><span>{{(value - parseFloat((value/1.05*0.05 + value/1.05*0.05*0.12) + (value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</span></p>
-                <span class="RentExtraction_confirm_tip">温馨提示：在商城中消费可以免除相应税费</span>
+                <p><span>¥</span><span>{{(value - parseFloat((value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</span></p>
+                <!-- <p><span>¥</span><span>{{(value - parseFloat((value/1.05*0.05 + value/1.05*0.05*0.12) + (value/1.05*0.05) + (value*0.03) + (value*0.005))).toFixed(2)}}</span></p> -->
+                <span class="RentExtraction_confirm_tip">温馨提示：在商城中消费可以免除相应手续费</span>
                 <div class="RentExtraction_confirm_fotter">
-                    <div @click="RentExtractionClick">确认提现</div><div @click="$router.push('/Discount')">前往商城</div>
+                    <div @click="RentExtractionClick">确认提现</div><div @click="shop">前往商城</div>
                 </div>
             </div>
         </van-popup>
@@ -102,15 +109,19 @@ export default {
                 return
             }
             if(this.$store.state.isLoading == false){
-                this.$dialog.confirm({
-                    title: '确认体现吗？',
-                    message: ''
-                }).then(() => {
-                    this.$store.dispatch('draw', parseFloat(this.value))
-                }).catch(() => {
-                // on cancel
-                });
+                this.$store.dispatch('draw', parseFloat(this.value))
+                // this.$dialog.confirm({
+                //     title: '确认体现吗？',
+                //     message: ''
+                // }).then(() => {
+                //     this.$store.dispatch('draw', parseFloat(this.value))
+                // }).catch(() => {
+                // // on cancel
+                // });
             }
+        },
+        shop(){
+            window.location.href = 'http://www.homeamc.cn/shops/wx/shops?wxh=sz_fangyuanli'
         }
     },
     filters:{
@@ -149,7 +160,7 @@ h4{
 }
 
 .RentExtraction_Amount{
-    width: 100%; height: 4.8rem; background:rgba(246,246,246,1); padding: 0.2rem 0.3rem;
+    width: 100%; background:rgba(246,246,246,1); padding: 0.2rem 0.3rem;
     .RentExtraction_Amounts{ 
         width: 100%; height: 0.95rem; border-bottom: 0.015rem solid rgba(206,206,206,1); line-height: 0.95rem;
         input{

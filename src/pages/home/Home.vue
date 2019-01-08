@@ -10,7 +10,7 @@
             </div>
             <div class="Home_presented">
                 <router-link to="/AlreadyPresented"><div class="Already_presented">¥{{index.applied}}</div></router-link>
-                <div class="Canbe_presented">¥{{index.balance}}</div>
+                <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=sz_fangyuanli"><div class="Canbe_presented">¥{{index.balance}}</div></a>
                 <router-link to="/WithdrawalOf"><div class="Inthe_presented">¥{{index.applying}}</div></router-link>
             </div>
         </nav>
