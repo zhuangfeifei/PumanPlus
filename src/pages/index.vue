@@ -1,7 +1,8 @@
 <template>
     <div id="index">
 
-        <router-view v-if="isIf"></router-view>
+        <router-view></router-view>
+        <!-- <router-view v-if="isIf"></router-view> -->
 
         <bottom-item></bottom-item>
 
@@ -21,7 +22,7 @@ export default {
     },
     computed:{
         isIf(){
-            if(this.$store.state.puman_unionId != ''){
+            if(this.$store.state.puman_unionId != null || this.$store.state.puman_unionId != '' || this.$store.state.puman_unionId != undefined){
                 return true
             }
         }
@@ -30,7 +31,7 @@ export default {
          
     },
     mounted(){
-        if(this.$store.state.puman_unionId == null){
+        if(this.$store.state.puman_unionId == null || this.$store.state.puman_unionId == '' || this.$store.state.puman_unionId == undefined){
             this.$router.go(0)
         }
     },

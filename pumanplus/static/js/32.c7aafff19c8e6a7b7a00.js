@@ -1,0 +1,2 @@
+webpackJsonp([32],{"2L9S":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var r={data:function(){return{}},components:{},created:function(){document.title="绑定商铺"},methods:{}},i={render:function(){var t=this.$createElement,e=this._self._c||t;return e("div",{attrs:{id:"BindShops"}},[e("router-view")],1)},staticRenderFns:[]};var o=n("VU/8")(r,i,!1,function(t){n("xjtF")},null,null);e.default=o.exports},xjtF:function(t,e){}});
+//# sourceMappingURL=32.c7aafff19c8e6a7b7a00.js.map

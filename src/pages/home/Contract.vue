@@ -6,7 +6,8 @@
                 <head>
                     <title>合同</title>
                 </head>
-                <body v-if="item.state != 1" style ="font-family: SimSun;" v-for="(item,index) in entrust" :key="index">
+                <body style ="font-family: SimSun;" v-for="(item,index) in entrust" :key="index">
+            <div v-if="item.state != 1">
             <div><strong>委托经营管理合同</strong></div>
             <div id="wt" style="text-align: right;">{{bianhao}}</div>
             <div style="width:100%; height:20px"> </div>
@@ -189,6 +190,7 @@
                 <div class="aligns"><small>{{page[4]}}/{{page[4]}}</small></div>
             </footer>
             <div style="width:100%; height:50px"> </div>
+            </div>
         </body>
     </html>
         </div>

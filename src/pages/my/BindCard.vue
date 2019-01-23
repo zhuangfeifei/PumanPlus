@@ -26,6 +26,10 @@
             </div>
         </div>
 
+        <div class="BindCard_isDefaults" @click="bindList.isDefault == 0 ? bindList.isDefault = 1 : bindList.isDefault = 0">
+            <img :src="bindList.isDefault == 0 ? img[0] : img[1]" alt=""><span>设为默认</span>
+        </div>
+
         <div class="bankNameList" :class="{bankNameListActive: bankNameList.length > 0}"><p v-for="(item,index) in bankNameList" :key="index" @click="bank(item)">{{item}}</p></div>
 
         <div class="BindCard_btn" :class="{BindCard_btn_active: isBind}" @click="next">确 &nbsp;定</div>
@@ -36,7 +40,8 @@
 export default {
     data() {
         return {
-            bindList:{realName:'', bankNo:'', bankName:'', bankProvince:'', bankCity:'', id:''}, bankName:'', bankNameList:[], isBind: false
+            bindList:{realName:'', bankNo:'', bankName:'', bankProvince:'', bankCity:'', id:'', isDefault:0}, bankName:'', bankNameList:[], isBind: false,
+            img:[require('../../assets/img/checke.png'), require('../../assets/img/checked.png')]
         }
     },
     components: {
@@ -52,7 +57,15 @@ export default {
         document.title = '绑定银行卡'
 
         this.$nextTick(()=>{
-            this.bindList.realName = this.user.name
+            if(this.$route.query.list){
+                let list = this.$route.query.list
+                this.bindList = {
+                    realName: this.user.name, bankNo: list.bankNo, bankName: list.bankName, bankProvince: list.province, bankCity: list.city, id: list.id, isDefault: list.isDefault
+                }
+                this.bankName = list.bankName
+            }else{
+                this.bindList.realName = this.user.name
+            }
         })
     },
     methods: {
@@ -133,6 +146,11 @@ export default {
             .citys{ margin-left: 0.28rem; }
         }
     }
+}
+
+.BindCard_isDefaults{
+    width: 100%; height: 0.4rem; display: flex; padding-left: 0.3rem; margin-top: 0.3rem; align-items: center; margin-bottom: 0.6rem; background-color: white;
+    img{ width: 0.3rem; height: 0.3rem; margin-right: 0.2rem; }
 }
 
 

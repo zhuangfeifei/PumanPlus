@@ -18,6 +18,9 @@
                         <img class="scanning" src="../../assets/img/scanning.png" alt="">
                 </van-uploader> -->
             </div>
+            <div class="BindCertificates_list" @click="isChangePhone">
+                <p>更换手机号码</p><img class="list_link" src="../../assets/img/links.png" alt="">
+            </div>
             <!-- <div class="BindCertificates_list BindCertificates_list_">
                 <div><p>证件照</p><p class="list_left">上传正反各一张图</p></div>
                 <div class="files_imgs">                                                                                                   
@@ -35,7 +38,8 @@
         <div class="BindCertificates_btn" :class="{BindCertificates_btn_active: isBind}" @click="next">提 &nbsp;交</div>
 
         <van-popup v-model="show" position="bottom" :overlay="true">
-            <van-picker class="BindCertificates_" show-toolbar title="证件类型" :columns="documentType" @cancel="onCancel" @confirm="onConfirm" 
+            <div class="BindCertificates_bottom" @click="onCancel"></div>
+            <van-picker class="BindCertificates_" :columns="documentType" @change="onChange" show-toolbar title="证件类型" @cancel="onCancel" @confirm="onConfirm" 
                 confirm-button-text="确定" :item-height="50"/>
         </van-popup>
 
@@ -52,7 +56,7 @@ export default {
     data() {
         return {
             documentType:['身份证','护照','台胞证','港澳通行证','军官证'], show: false, disabled: false, isBind: false,
-            bindList:{ phone:'', buyerName:'',cardNo:'', cardType: '' }, cardTypeName: '', success: false
+            bindList:{ phone:'', buyerName:'',cardNo:'', cardType: '' }, cardTypeName: '', success: false, is: true
         }
     },
     components: {
@@ -67,24 +71,37 @@ export default {
     created(){
         this.bindList.phone = this.$route.query.phone || ''
     },
+    mounted(){
+        
+    },
     methods: {
         isShow(){
             this.show = !this.show
+            if(this.is){
+                this.cardTypeName = this.documentType[0]
+                this.bindList.cardType = 0
+                this.is = false
+            }
         },
         onConfirm(value, index) {
             this.cardTypeName = value
             this.bindList.cardType = index
-            this.isShow()
+            this.show = !this.show
         },
         onCancel() {
-            this.isShow()
+            this.show = !this.show
+        },
+        onChange(picker, value, index) {
+            this.cardTypeName = value
+            this.bindList.cardType = index
         },
         onRead(file){
             this.bindList.files.push(file)
         },
-        // deletes(index){
-        //     this.bindList.files.splice(index,1)
-        // },
+        isChangePhone(){
+            this.$store.commit('isChangePhone', true)
+            this.$router.push('/Authentication')
+        },
         next(){
             if(this.isBind){
                 this.success = true
@@ -115,7 +132,7 @@ export default {
 
 
 .BindCertificates_content{
-    width: 100%; height: 5rem; background:rgba(246,246,246,1); padding: 0 0.3rem;
+    width: 100%; background:rgba(246,246,246,1); padding: 0 0.3rem;
     .BindCertificates_list{
         width: 100%; height: 1.23rem; display: flex; justify-content: space-between;
         border-bottom: 0.01rem solid rgba(206,206,206,1); .font2; font-size: 0.28rem;
@@ -124,7 +141,7 @@ export default {
             content: '*'; color: #E74744;
         }
         input{
-            width: 5rem; height: 0.72rem; margin-top: 0.255rem; line-height: o.255rem; text-align: right; border: 0; outline: none; background: none;
+            width: 50%; height: 0.72rem; margin-top: 0.255rem; line-height: o.255rem; text-align: right; border: 0; outline: none; background: none;
         }
         ::-webkit-input-placeholder{
             color: #E74744!important;
@@ -135,8 +152,11 @@ export default {
         .list_ringht{
             color: #E74744; font-size: 0.28rem;
         }
-        .list_ringhts{ width: 5rem; color: #E74744; font-size: 0.28rem; text-align: right; }
+        .list_ringhts{ width: 50%; color: #E74744; font-size: 0.28rem; text-align: right; }
         .scanning{ width: 0.3rem; height: 0.3rem; margin-top: 0.45rem; }
+        .list_link{
+            width: 0.16rem; height: 0.29rem; margin-top: 0.48rem; margin-left: 0.19rem;
+        }
     }
     .BindCertificates_list:last-child{ border: 0 }
     .BindCertificates_list_{
@@ -164,12 +184,16 @@ export default {
 }
 
 
+
+.BindCertificates_bottom{
+    width: 100%; height: 1rem; opacity: 0; z-index: 10; position: absolute; left: 0; top: 0;
+}
 .BindCertificates_{
-    width: 100%;
+    width: 100%; 
 }
 
 .BindCertificates_btn{
-    width: 6.7rem; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
+    width: 86%; height: 0.96rem; line-height: 0.96rem; text-align: center; color:rgba(255,255,255,1); text-shadow:0px 1px 0px rgba(0,0,0,0.3);
     font-size: 0.36rem; .font1; margin: 0.3rem auto;
     background:rgba(206,206,206,1); border-radius: 0.48rem; box-shadow:0px 0px 0.2rem 0px rgba(0,0,0,0.16);
 }

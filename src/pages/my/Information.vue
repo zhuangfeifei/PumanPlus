@@ -15,14 +15,16 @@
                 <span>生日</span><p><span class="list_ringhts">{{list.birthday}}</span><img class="list_link" src="../../assets/img/links.png" alt=""></p>
                 <datetime @on-change="change" class="date" :title="''" v-model="list.birthday" :min-year="min" :max-year="max"></datetime>
             </div>
-            <router-link to="/BindCard">
+            <!-- <router-link to="/BindCard"> -->
+            <router-link :to="user.bankCards.length > 0 ? '/ChangeBank' : '/BindCard'">
             <div class="Information_list">
-                <span>银行卡</span><p><span class="list_ringhts">绑定银行卡</span><img class="list_link" src="../../assets/img/links.png" alt=""></p>
+                <!-- <span>银行卡</span><p><span class="list_ringhts">绑定银行卡</span><img class="list_link" src="../../assets/img/links.png" alt=""></p> -->
+                <span>银行卡</span><p><span class="list_ringhts">{{user.bankCards.length > 0 ? '更换银行卡' : '绑定银行卡'}}</span><img class="list_link" src="../../assets/img/links.png" alt=""></p>
             </div>
             </router-link>
-            <div v-if="user.phonenumber != ''" class="Information_list Information_phone" @click="isChangePhone">
+            <!-- <div v-if="user.phonenumber != ''" class="Information_list Information_phone" @click="isChangePhone">
                 <span>更换手机号</span><p><img class="list_link" src="../../assets/img/links.png" alt=""></p>
-            </div>
+            </div> -->
         </div>
 
         <div class="Information_btn" @click="next">确 &nbsp;定</div>
@@ -118,7 +120,7 @@ export default {
         }
         span:nth-child(2){ text-align: right; }
     }
-    .Information_phone{
+    .Information_list:last-child{
         border: 0;
     }
 }

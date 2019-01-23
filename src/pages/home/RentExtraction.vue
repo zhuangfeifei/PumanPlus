@@ -3,7 +3,7 @@
 
         <nav class="RentExtraction">
             <div><img :src="yhimg" alt=""></div>
-            <div v-if="user.bankCards != ''"><h5>{{user.bankCards[0].bankName}}</h5><p>Bank card</p><span>{{user.bankCards[0].bankNo | filter}}</span></div>
+            <div v-if="user.bankCards != ''"><h5>{{card.bankName}}</h5><p>Bank card</p><span>{{card.bankNo | filter}}</span></div>
         </nav>
 
         <h4>计提金额</h4>
@@ -54,8 +54,11 @@ export default {
     data() {
         return {
             value:'',show: false,
-            yhimg:'http://www.homeamc.cn:80/puman/kaptcha/api/YH',
+            yhimg:'http://www.homeamc.cn/pm/static/banklogo/YH.png',
         }
+    },
+    beforeCreate(){
+        this.$store.dispatch('banklist')
     },
     computed: {
         user(){
@@ -66,19 +69,31 @@ export default {
             if(this.$store.state.index == '') this.$store.commit('INDEX')
             return this.$store.state.index
         },
+        card(){
+            let card = ''
+            for(let val of this.$store.state.banklist){
+                val.isDefault == 1 ? card = val : null
+            }
+            return card
+        },
     },
     created(){
         document.title = '租金提取'
 
         this.$nextTick(()=>{
+            // for(let val of this.$store.state.user.bankCards){
+            //     console.log(val)
+            //     val.isDefault == 1 ? this.card = val : null
+            // }
+            // console.log(this.card)
             let yhName = {
                 '北京银行':'BJYH','工商银行':'GSYH','光大银行':'GDYH','华夏银行':'HXYH','建设银行':'JSYH','交通银行':'JTYH','民生银行':'MSYH','南京银行':'NJYH','宁波银行':'NBYH',
                 '农业银行':'NYYH','浦发银行':'PFYH','深圳发展银行':'SZFZYH','兴业银行':'XYYH','邮政银行':'YZYH','招商银行':'ZSYH','中国银行':'ZGYH','中信银行':'ZXYH'
             };
-            let bankNames = this.$store.state.user.bankCards ? this.$store.state.user.bankCards[0].bankName : ''
+            let bankNames = this.$store.state.user.bankCards ? this.card.bankName : ''
             for(let key in yhName){
                 if(bankNames.indexOf(key) >= 0){
-                    this.yhimg = `http://www.homeamc.cn:80/puman/kaptcha/api/${yhName[key]}`
+                    this.yhimg = `http://www.homeamc.cn/pm/static/banklogo/${yhName[key]}.png`
                     break
                 }
             }

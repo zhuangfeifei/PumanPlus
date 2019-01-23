@@ -37,6 +37,7 @@ const Supplement = resolve => require(['@/pages/my/Supplement'], resolve)
 const Help = resolve => require(['@/pages/my/Help'], resolve)
 const BindShopEnd = resolve => require(['@/pages/my/BindShopEnd'], resolve)
 const MyReservation = resolve => require(['@/pages/my/MyReservation'], resolve)
+const ChangeBank = resolve => require(['@/pages/my/ChangeBank'], resolve)
 
 
 Vue.use(Router)
@@ -81,5 +82,6 @@ export default new Router({
     { path:'/Help', component: Help },
     { path:'/BindShopEnd', component: BindShopEnd },
     { path:'/MyReservation', component: MyReservation },
+    { path:'/ChangeBank', component: ChangeBank },
   ]
 })

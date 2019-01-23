@@ -8,16 +8,20 @@
             <div class="Supplement_list_">
                 <div><p>不动产证</p><p class="list_left">最多添加5张</p></div>
                 <div class="Supplement_files_imgs">
-                    <div v-if="image == ''" class="Supplement_files_imgs_list" v-for="(item,index) in bindList.files" :key="index">
-                        <img :src="item.content" alt="">
-                        <img @click="deletes(index)" class="delet" src="../../assets/img/deleteImg.png" alt="">
+                    <div v-if="image == ''" class="Supplement_files_imgs_lists">
+                        <div class="Supplement_files_imgs_list" v-for="(item,index) in bindList.files" :key="index">
+                            <img :src="item.content" alt="">
+                            <img @click="deletes(index)" class="delet" src="../../assets/img/deleteImg.png" alt="">
+                        </div>
+                        <van-uploader :after-read="onRead" accept="image/gif, image/jpeg" :disabled="disabled">
+                            <div class="Supplement_files"><img src="../../assets/img/files.png" alt=""></div>
+                        </van-uploader>
                     </div>
-                    <van-uploader v-if="image == ''" :after-read="onRead" accept="image/gif, image/jpeg" :disabled="disabled">
-                        <div class="Supplement_files"><img src="../../assets/img/files.png" alt=""></div>
-                    </van-uploader>
-                    <div v-if="image != ''" class="Supplement_files_imgs_list" v-for="(items,indexs) in imgList" :key="indexs">
-                        <img v-if="items.img != ''" @click="imgPreview(items.img)" :src="items.img" alt="">
-                        <img v-if="items.pdf != ''" @click="pdfDetail(items.pdf)" src="../../assets/img/PDF.png" alt="">
+                    <div v-if="image != ''" class="Supplement_files_imgs_lists">
+                        <div class="Supplement_files_imgs_list" v-for="(items,indexs) in imgList" :key="indexs">
+                            <img v-if="items.img != ''" @click="imgPreview(items.img)" :src="items.img" alt="">
+                            <img v-if="items.pdf != ''" @click="pdfDetail(items.pdf)" src="../../assets/img/PDF.png" alt="">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -167,10 +171,13 @@ export default {
         }
         .Supplement_files_imgs{
             width: 4.7rem; padding-top: 0.15rem; display: inline-block;
-            .Supplement_files_imgs_list{
-                width: 1.2rem; height: 1.2rem; float: left; position: relative; margin-right: 0.35rem; margin-bottom: 0.3rem;
-                img{ width: 100%; height: 100%; }
-                .delet{ width: 0.3rem; height: 0.3rem; position: absolute; right: -0.15rem; top: -0.15rem; }
+            .Supplement_files_imgs_lists{ 
+                width: 100%; height: 100%;
+                .Supplement_files_imgs_list{
+                    width: 1.2rem; height: 1.2rem; float: left; position: relative; margin-right: 0.35rem; margin-bottom: 0.3rem;
+                    img{ width: 100%; height: 100%; }
+                    .delet{ width: 0.3rem; height: 0.3rem; position: absolute; right: -0.15rem; top: -0.15rem; }
+                }
             }
             .Supplement_files{
                 width: 1.2rem; height: 1.2rem; float: left; text-align: center; background:rgba(232,232,232,1); margin-bottom: 0.3rem;

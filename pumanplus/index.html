@@ -1,6 +1,10 @@
-<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width,initial-scale=1"><title>扑满</title><link href=http://www.homeamc.cn/pm/static/css/app.021d3a53d59a8ded68ddb42076438ac2.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=http://www.homeamc.cn/pm/static/js/manifest.6a9aa5e55e18b286b974.js></script><script type=text/javascript src=http://www.homeamc.cn/pm/static/js/app.d3ac690611daf6747e8c.js></script></body><script>var puman_wxhs = 'puman2016'
-			var puman_openIds = 'oLCKIwOtSoGIY6AE5iMe4U1oW-iA'
-			var puman_unionIds = 'o8TbDwQ3Zc1Of54kr8fTDcjkOeOI'
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width,initial-scale=1"><title>扑满</title><link href=http://www.homeamc.cn/pm/static/css/app.3b4077335beed9a4527b15c2cc8a5531.css rel=stylesheet></head><body id=bodys><div id=app></div><script type=text/javascript src=http://www.homeamc.cn/pm/static/js/manifest.e132a0ceaff4f3bc85b6.js></script><script type=text/javascript src=http://www.homeamc.cn/pm/static/js/app.e547f3a795447a0fcce3.js></script></body><script>var puman_wxhs = 'puman2016'
+			// var puman_openIds = 'oLCKIwOtSoGIY6AE5iMe4U1oW-iA'
+			// var puman_unionIds = 'o8TbDwQ3Zc1Of54kr8fTDcjkOeOI'
+			var puman_openIds = 'oLCKIwL3bQl91BN3vaAf8gOKAqC4'
+			var puman_unionIds = 'o8TbDwaKamb8I3OnMTTB6BxR4DXk'
+			// var puman_openIds = 'oLCKIwEtLj-VqyaS1prCbaz3W0DU'
+			// var puman_unionIds = 'o8TbDwZotuDQzGfMoM1mxMtG5ktc'
 			// var puman_wxhs = '{wxh}'
     	// var puman_openIds = '{openId}'
     	// var puman_unionIds = '{unionId}'
@@ -11,7 +15,7 @@
 			//第三个参数是true的话,会增加数据而不是重新设置,res必须是数组
 				if (isSaveOldData) {
 					if(getLocal(key)) {
-						let oldData = getLocal(key);
+						var oldData = getLocal(key);
 						return window.localStorage.setItem(key, JSON.stringify(oldData.concat(res)))
 					}
 				}

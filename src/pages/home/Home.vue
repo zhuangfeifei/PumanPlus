@@ -10,7 +10,7 @@
             </div>
             <div class="Home_presented">
                 <router-link to="/AlreadyPresented"><div class="Already_presented">¥{{index.applied}}</div></router-link>
-                <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=sz_fangyuanli"><div class="Canbe_presented">¥{{index.balance}}</div></a>
+                <a href="http://www.homeamc.cn/shops/wx/single/Balance?wxh=puman2016"><div class="Canbe_presented">¥{{index.balance}}</div></a>
                 <router-link to="/WithdrawalOf"><div class="Inthe_presented">¥{{index.applying}}</div></router-link>
             </div>
         </nav>
@@ -56,6 +56,7 @@ export default {
     },
     mounted(){
         document.title = '扑满'
+        
         this.$store.state.puman_unionId != null ? this.$store.dispatch('index') : ''
         // this.$store.dispatch('user')
         let a = setInterval(()=>{

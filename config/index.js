@@ -12,9 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/pumanplus":{       
-        target:"http://192.168.1.63",  
+        // target:"http://192.168.1.63",  
         // target:"http://192.168.1.137:8013",  
-        // target:"http://www.homeamc.cn",
+        target:"http://www.homeamc.cn",
     		changeOrigin: true,
     		pathRewrite: {
           '^/pumanplus': ''
@@ -23,7 +23,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '192.168.1.27', // can be overwritten by process.env.HOST
+    host: '192.168.1.60', // can be overwritten by process.env.HOST
     port: 8030, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -53,6 +53,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../pumanplus'),
     assetsSubDirectory: 'static',
+    // assetsPublicPath: './',
     assetsPublicPath: 'http://www.homeamc.cn/pm/',
 
     /**

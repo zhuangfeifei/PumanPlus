@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         sign(state) {
-            state != -1 || state == 2 ? this.$router.push({path:'/Contract'}) : ''
+            state != 1 && state != 0 ? this.$router.push({path:'/Contract'}) : ''
         },
         num(){
             return Math.floor(Math.random()*5)

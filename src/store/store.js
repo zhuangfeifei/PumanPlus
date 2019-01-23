@@ -10,9 +10,9 @@ import { Toast, Dialog } from 'vant'
 const state = {
     isLoading: false,
     active: 0,   // 导航
-    puman_wxh: Util.getLocal('puman_wxh'),
-    puman_openId: Util.getLocal('puman_openId'),
-    puman_unionId: Util.getLocal('puman_unionId'),
+    puman_wxh: '',
+    puman_openId: '',
+    puman_unionId: '',
     imgUrl: axios.urls + '/shops/kaptcha/',
     isPage: true,
     isPay: false,
@@ -35,10 +35,20 @@ const state = {
     promotionList: '',       // 秒杀
     image: '',       // 查询商铺的不动产证、土地证等图片附件
     times:'',
+    banklist:'',
     isChangePhone: false
 }
 
 const mutations = {
+    puman_wxh(state,res){
+        state.puman_wxh = res
+    },
+    puman_openId(state,res){
+        state.puman_openId = res
+    },
+    puman_unionId(state,res){
+        state.puman_unionId = res
+    },
     isLoading(state,res){
         state.isLoading = res
     },
@@ -116,6 +126,9 @@ const mutations = {
     },
     IMAGE(state, res){
         state.image = res
+    },
+    banklist(state, res){
+        state.banklist = res
     },
     TIMES(state){
         var date = new Date();
@@ -344,9 +357,9 @@ const actions = {
         })
         .catch(err => {console.log(err)})
     },
-    bank({state}, list){   //   更新个人信息
+    bank({state}, list){   //   绑定银行卡
         axios.api.post('/pm/api/save/bank', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId,
-            bankNo: list.bankNo, bankName: list.bankName, bankCity: list.bankCity, bankProvince: list.bankProvince, realName: encodeURI(list.realName), id: list.id }) )
+            bankNo: list.bankNo, bankName: list.bankName, bankCity: list.bankCity, bankProvince: list.bankProvince, realName: encodeURI(list.realName), id: list.id, isDefault: list.isDefault }) )
         .then(res => {
             // console.log(res.data)   
             if(res.data.code == 200) {
@@ -473,6 +486,30 @@ const actions = {
     //     })
     //     .catch(err => console.log(err))
     // },
+    banklist({commit,state}){   // 查询指定业主名下的银行卡列表
+        axios.api.post('/pm/api/personal/bank/list', $.param({ access_type:'WXH5', wxh: state.puman_wxh, openId: state.puman_openId, unionId: state.puman_unionId }))
+        .then(res => {
+            // console.log(res.data)   
+            if(res.data.code == 200) {
+                let bankLists = res.data.data
+                for(let val of bankLists){
+                    let yhName = {
+                        '北京银行':'BJYH','工商银行':'GSYH','光大银行':'GDYH','华夏银行':'HXYH','建设银行':'JSYH','交通银行':'JTYH','民生银行':'MSYH','南京银行':'NJYH','宁波银行':'NBYH',
+                        '农业银行':'NYYH','浦发银行':'PFYH','深圳发展银行':'SZFZYH','兴业银行':'XYYH','邮政银行':'YZYH','招商银行':'ZSYH','中国银行':'ZGYH','中信银行':'ZXYH'
+                    };
+                    for(let key in yhName){
+                        if(val.bankName.indexOf(key) >= 0){
+                            // val.logo = yhName[key]
+                            val.logo = `http://www.homeamc.cn/pm/static/banklogo/${yhName[key]}.png`
+                            break
+                        }
+                    }
+                }
+                commit('banklist', bankLists)
+            }
+        })
+        .catch(err => console.log(err))
+    },
 }
 
 const getters ={
