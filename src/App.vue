@@ -13,7 +13,9 @@ export default {
       return this.$store.state.puman_unionId == null ? true : false || this.$store.state.isLoading
     }
   },
-  
+  beforeCreate(){
+    
+  }
 }
 </script>
 

@@ -10,9 +10,9 @@ import { Toast, Dialog } from 'vant'
 const state = {
     isLoading: false,
     active: 0,   // 导航
-    puman_wxh: '',
-    puman_openId: '',
-    puman_unionId: '',
+    puman_wxh: Util.getLocal('puman_wxh'),
+    puman_openId: Util.getLocal('puman_openId'),
+    puman_unionId: Util.getLocal('puman_unionId'),
     imgUrl: axios.urls + '/shops/kaptcha/',
     isPage: true,
     isPay: false,

@@ -16,13 +16,6 @@ api.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 // 请求拦截
 api.interceptors.request.use(function (config) {
-
-    if(store.state.puman_wxh == '' || store.state.puman_wxh == null || store.state.puman_wxh == undefined){
-      store.commit('puman_wxh', Util.getLocal('puman_wxh'))
-      store.commit('puman_openId', Util.getLocal('puman_openId'))
-      store.commit('puman_unionId', Util.getLocal('puman_unionId'))
-      store.dispatch('index')
-    }
     
     store.commit('isLoading', true)
 

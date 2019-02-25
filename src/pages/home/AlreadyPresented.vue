@@ -6,7 +6,7 @@
             <h4><span>¥</span><span>{{item.drawCash}}</span></h4>
             <p><span>{{item.bankName}}</span><span>{{item.bankNo | filter}}</span></p>
         </div>
-        <no-data v-if="applied.records.length == 0"></no-data>
+        <no-data v-if="applied.records == ''"></no-data>
 
     </div>
 </template>
